@@ -76,7 +76,7 @@ function SandboxesPage() {
 
               {/* Controles reais */}
               <div className="mt-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Controls on the bench</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Controles na bancada</p>
                 <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
                   {catalog.controls.slice(0, 3).map((c, i) => (
                     <li key={i}>· {c}</li>
@@ -86,13 +86,13 @@ function SandboxesPage() {
 
               {/* Competência */}
               <div className="mt-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Competence</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Competência</p>
                 <p className="mt-0.5 text-xs text-foreground/90">{catalog.competence}</p>
               </div>
 
               {/* Limites honestos */}
               <div className="mt-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">What it does NOT show</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">O que NÃO demonstra</p>
                 <ul className="mt-0.5 space-y-0.5 text-xs text-muted-foreground">
                   {catalog.limits.map((l, i) => (
                     <li key={i}>· {l}</li>

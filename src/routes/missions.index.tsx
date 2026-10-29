@@ -69,23 +69,23 @@ function MissionsIndexPage() {
                         : "bg-muted text-muted-foreground")
                   }
                 >
-                  {done ? "dossier saved" : interrupted ? "interrupted" : "not started"}
+                  {done ? "dossiê salvo" : interrupted ? "interrompida" : "não iniciada"}
                 </span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{m.problem}</p>
 
               <p className="mt-3 text-xs text-foreground/90">
-                <span className="font-semibold text-primary">Competency: </span>
+                <span className="font-semibold text-primary">Competência: </span>
                 {m.competency}
               </p>
               <p className="mt-2 text-xs text-foreground/90">
-                <span className="font-semibold text-primary">Learning product: </span>
+                <span className="font-semibold text-primary">Produto de aprendizagem: </span>
                 {m.product}
               </p>
 
               <p className="mt-3 flex flex-wrap items-center gap-1.5">
                 <span className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
-                  Prerequisites:
+                  Pré-requisitos:
                 </span>
                 {m.prereqConceptIds.map((cid) => {
                   const c = getConcept(cid);
