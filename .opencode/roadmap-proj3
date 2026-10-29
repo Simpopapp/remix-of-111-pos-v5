@@ -1,0 +1,109 @@
+# Roadmap — Project 3 (estúdio de aprendizagem e investigação)
+
+Gates globais por fase (PRD D12): tsgo limpo · vitest verde ≥101 · build OK ·
+E2E das telas tocadas · nenhum teste contratado enfraquecido.
+
+## F0 — Fundação de identidade v3 e shell (PRD §3/F0, D1–D4, contratos 9.1–9.2)
+- [x] Tokens tema claro + bancada + evidência em styles.css (sem cor hardcoded)
+- [x] Papéis tipográficos aplicados (Fraunces/Grotesk/Mono)
+- [x] Header novo: Início·Biblioteca·Laboratórios·Missões·Progresso·Meu app, sem badge n/111, mobile navegável
+- [x] Rota /library criada com o acervo atual; links consistentes
+- [x] Passada de contraste nos componentes que assumiam fundo escuro
+- Gates F0: tsgo OK · vitest 118/118 · build OK · e2e_f0_shell verde (nav completa, /library 111 cards, ?q= sincronizado, mobile nav visível, 0 pageerrors) · tema claro aplicado
+- [x] F0 concluída (gates acima verdes)
+
+## F1 — Home: mesa de trabalho (PRD §3/F1)
+- [x] Estados: primeira visita · retorno com ponto de retomada · revisão pendente · concluído
+- [x] Catálogo sai de /; seleção editorial curta
+- [x] Objetivo editável com admissão de não correspondência (D9)
+- Gates F1: tsgo OK · vitest 127/127 (+next-action.test: 9 contratos) · build OK · e2e_f1_home verde (1ª visita sem catálogo, retorno com ação primária contextualizada, admissão visível, recs em pt-BR)
+- [x] F1 concluída
+
+## F2 — Biblioteca: problema, mecanismo e contraste (PRD §3/F2)
+- [x] Busca inclui aulas+labs+missões com motivo e tipo de experiência
+- [x] Cards: problema + ação aprendida + representação (analogia sai do resumo)
+- [x] Categorias com apresentação própria; vazio orientado; filtros preservados
+- Gates F2: tsgo OK · vitest 141/141 (+library-search: 14 testes) · build OK · e2e_f2_library verde (7 passos: sintoma com motivo, categoria editorial, filtros preservados ao voltar, vazio orientado, visão compacta, filtro de tipo; 0 pageerrors) · nenhum teste contratado enfraquecido
+- [x] F2 concluída
+
+## F3 — Aula: compreensão guiada, consulta e prática (PRD §3/F3, 9.6)
+- [x] Modos guided/reference/practice (?mode=)
+- [x] Pré-requisitos com nome/motivo/retomada
+- [x] Render dedicado de timeline (teste de shapes)
+- [x] Síntese final derivada do contrato Lesson
+- Gates F3: tsgo limpo · vitest 145/145 (+lesson-modes: 4 testes) · build OK ·
+  e2e_f3_lesson verde (5 passos: guiado default com pré-reqs nomeados,
+  previsão→modelo→timeline, retorno ao ponto via ?from=, consulta sem
+  prática, prática com síntese; 0 pageerrors) · nenhum teste contratado
+  enfraquecido
+- [x] F3 concluída (gates acima verdes)
+
+## F4 — Laboratórios: catálogo intencional + bancada unificada (PRD §3/F4, 9.7)
+- [x] Catálogo com fenômeno/controles/competência/limites por lab (+ chips prática vs contexto)
+- [x] Bancada: previsão→execução identificável→observação→relatório (bench-shell.tsx + bench.ts)
+- [x] Comparação rotulada; reinício ≠ configuração; estados completos (no-run, invalid-param, partial, paused, out-of-model, ready)
+- [x] Os 6 labs um a um (ratelimit·circuit·nplusone·sqli·pubsub·tail) sem regredir simulators.test
+- Gates F4: tsgo limpo · vitest 157/157 (+bench.test: 12 contratos; simulators intacto) · build OK ·
+  e2e_f4_lab verde (8 passos: previsão exigida antes da 1ª execução, execução
+  identificável #1, comparação A/B rotulada, relatório registrado, reinício
+  explícito, catálogo completo, pausa nomeada no pubsub, unidades no tail;
+  0 pageerrors) · nenhum teste contratado enfraquecido
+- [x] F4 concluída (gates acima verdes)
+
+## F5 — Missões: investigação com memória (PRD §3/F5, D7)
+- [x] Histórico de raciocínio preservado entre etapas (teste de store)
+- [x] Dossiê derivado e editável
+- [x] Lab↔missão com ida-e-volta de hipótese/resultado
+- [x] Índice com problema/competência/pré-reqs/produto/interrompida
+- Gates F5: tsgo limpo · vitest 169/169 (+mission-history: 12 contratos) · build OK ·
+  e2e_f5_mission verde (9 passos: índice com competência/pré-reqs/produto,
+  histórico preservado entre etapas, resultado de tarefa no histórico,
+  interrompida com etapa no índice, hipótese carregada ao lab, relatório da
+  bancada incorporado como evidência, dossiê derivado e salvo, recarga
+  preserva 6 entradas; 0 pageerrors) · nenhum teste contratado enfraquecido
+- [x] F5 concluída (gates acima verdes)
+
+## F6 — Progresso, evidências e revisão (PRD §3/F6, 9.3–9.4)
+- [x] Store de evidência contextual (chave própria; revealed ≠ demonstração)
+- [x] Progresso como perguntas + lacunas + evidências; 0/0 = "sem prática disponível"
+- [x] Revisão como sessão de recuperação; retained só via recordAttempt
+- [x] Caderno com origem rastreada (/notebook; origem exigida fora de "note")
+- Gates F6: tsgo limpo · vitest 187/187 (+evidence: 10, +notebook: 8) · build OK ·
+  e2e_f6_progress verde (9 passos: abertura com perguntas e 0/0 honesto,
+  tentativa em aula com cenário/resposta/critérios casados por ts, 2
+  tentativas, comparação lado a lado salva no caderno, recuperação vencida
+  respondida fecha via recordAttempt, chip Retido ativo, caderno com origem
+  e anotação, bancada grava evidência+relatório; 0 pageerrors) · nenhum
+  teste contratado enfraquecido
+- [x] F6 concluída (gates acima verdes)
+
+## F7 — Meu app: registro contextual (PRD §3/F7, 9.5)
+- [x] Ficha de decisão (necessidade→decisão→motivo→alternativa→evidência→verificação)
+- [x] "Não se aplica" de primeira classe; legado preservado 1:1 (somente leitura)
+- Gates F7: tsgo limpo · vitest 196/196 (+decisions: 9; learning/recommend intactos) · build OK ·
+  e2e_f7_mine verde (5 passos: legado preservado com significado histórico,
+  ficha completa com alternativa/evidência/verificação e badge "percurso do
+  objetivo", "não se aplica" sem texto de decisão, ordenação por relevância
+  ao objetivo, recarga preserva fichas + legado; 0 pageerrors)
+- [x] F7 concluída (gates acima verdes)
+
+## F8 — Acabamento transversal (PRD §3/F8)
+- [ ] Tabela de estados §15 aplicada nas telas novas
+- [ ] Teclado completo; equivalentes que respondem à pergunta; reduced-motion
+- [ ] Mobile recomposto (não empilhado); idioma pt-BR na UI
+- Gates F8: tsgo · vitest · build · e2e_f8_keyboard
+- [ ] F8 concluída
+
+## F9 — Conteúdo: percursos fechados e honestidade (PRD §3/F9, contínuo)
+- [ ] Auditoria dos 111 conceitos pelos 8 critérios; elos frágeis primeiro
+- [ ] Percursos sem referência superficial no ponto decisivo
+- [ ] reviewed só com revisão efetiva
+- Gates F9: tsgo · vitest · build
+- [ ] F9 concluída (metas parciais registradas aqui)
+
+## Encerramento
+- Reporte ao monitor (seção 20 do plan.md) e registre "remix finalizado (+N)"
+  por grande objetivo concluído; linha "Próximo remix:" aponta a fase pendente.
+- Próximo remix: **F8 — Acabamento transversal** (tabela de estados §15,
+  teclado completo, mobile recomposto, passada pt-BR na UI; F6 e F7
+  concluídas neste remix — stage-12).
