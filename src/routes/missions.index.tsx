@@ -6,13 +6,13 @@ import { useLearning } from "@/hooks/use-learning";
 export const Route = createFileRoute("/missions/")({
   head: () => ({
     meta: [
-      { title: "Missions — VibeCoder Academy" },
+      { title: "Missões — VibeCoder Academy" },
       {
         name: "description",
         content:
           "Missões integradas num cenário recorrente: prever, experimentar, decidir, transferir e escrever o dossiê — o ciclo completo de aprendizagem, em ordem.",
       },
-      { property: "og:title", content: "Missions — VibeCoder Academy" },
+      { property: "og:title", content: "Missões — VibeCoder Academy" },
       {
         property: "og:description",
         content:

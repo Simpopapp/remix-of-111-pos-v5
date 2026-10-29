@@ -30,11 +30,11 @@ export const Route = createFileRoute("/concepts/$id")({
   head: ({ params }) => {
     const concept = getConcept(Number(params.id));
     const title = concept
-      ? `#${concept.id} ${concept.name} — 111 Production Essentials`
-      : "Concept — 111 Production Essentials";
+      ? `#${concept.id} ${concept.name} — 111 Essenciais de Produção`
+      : "Conceito — 111 Essenciais de Produção";
     const description = concept
       ? `${concept.eli.slice(0, 150)}`
-      : "A production architecture essential explained like you're 10.";
+      : "Um essencial de arquitetura de produção explicado de forma simples.";
     return {
       meta: [
         { title },

@@ -16,13 +16,13 @@ export const Route = createFileRoute("/sandboxes")({
   },
   head: () => ({
     meta: [
-      { title: "Labs — VibeCoder Academy" },
+      { title: "Laboratórios — VibeCoder Academy" },
       {
         name: "description",
         content:
           "Seis laboratórios focados: rate limiting, circuit breaking, consultas N+1, SQL injection, filas e latência de cauda. Cada card declara o fenômeno, os controles reais, a competência que constrói e os limites.",
       },
-      { property: "og:title", content: "Labs — VibeCoder Academy" },
+      { property: "og:title", content: "Laboratórios — VibeCoder Academy" },
       {
         property: "og:description",
         content:

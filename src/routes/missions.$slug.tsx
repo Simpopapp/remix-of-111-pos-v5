@@ -27,8 +27,8 @@ export const Route = createFileRoute("/missions/$slug")({
   head: ({ params }) => {
     const mission = getMission(params.slug);
     const title = mission
-      ? `${mission.title} — Missions — VibeCoder Academy`
-      : "Mission — VibeCoder Academy";
+      ? `${mission.title} — Missões — VibeCoder Academy`
+      : "Missão — VibeCoder Academy";
     const description = mission ? mission.problem : "Missão integrada de aprendizagem.";
     return {
       meta: [
