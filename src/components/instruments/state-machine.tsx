@@ -71,7 +71,7 @@ export function StateMachineInstrument({ data }: { data: StateMachineData }) {
 
       <div className="rounded-lg border border-border/60">
         <div className="border-b border-border/50 bg-secondary/60 px-2 py-1.5 font-mono text-xs uppercase tracking-wide text-muted-foreground">
-          history
+          histórico
         </div>
         <ol className="space-y-1 px-2 py-2 font-mono text-xs text-foreground/90">
           {data.history.map((h, i) => (
