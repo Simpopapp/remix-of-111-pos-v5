@@ -71,19 +71,19 @@ describe("bancada unificada — contrato (F4/D6)", () => {
   it("relatório sem execução é bloqueado com motivo (sem evidência suficiente)", () => {
     const r = reportReadiness({ attempts: [], hypothesis: "h", interpretation: "i" });
     expect(r.state).toBe("blocked");
-    if (r.state === "blocked") expect(r.reason).toMatch(/no evidence/i);
+    if (r.state === "blocked") expect(r.reason).toMatch(/sem evidência/i);
   });
 
   it("relatório sem previsão é bloqueado (previsão antes da execução)", () => {
     const r = reportReadiness({ attempts: [attempt(1)], hypothesis: "  ", interpretation: "i" });
     expect(r.state).toBe("blocked");
-    if (r.state === "blocked") expect(r.reason).toMatch(/prediction/i);
+    if (r.state === "blocked") expect(r.reason).toMatch(/previsão/i);
   });
 
   it("relatório sem interpretação é bloqueado", () => {
     const r = reportReadiness({ attempts: [attempt(1)], hypothesis: "h", interpretation: "" });
     expect(r.state).toBe("blocked");
-    if (r.state === "blocked") expect(r.reason).toMatch(/interpretation/i);
+    if (r.state === "blocked") expect(r.reason).toMatch(/interpretação/i);
   });
 
   it("com previsão + execuções + interpretação o relatório fica pronto", () => {
