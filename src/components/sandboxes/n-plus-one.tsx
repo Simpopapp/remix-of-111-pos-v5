@@ -6,36 +6,36 @@ import { BenchShell, type BenchRunContext } from "./bench-shell";
 const SPECS: BenchParamSpec[] = [
   {
     key: "users",
-    label: "Items (users)",
+    label: "Itens (usuários)",
     min: 5,
     max: 50,
     step: 5,
     default: 12,
-    hint: "the same entities in every strategy run",
+    hint: "as mesmas entidades em cada execução de estratégia",
   },
   {
     key: "roundTripMs",
-    label: "Round-trip cost",
+    label: "Custo de ida e volta",
     min: 5,
     max: 100,
     step: 5,
     default: 30,
     unit: "ms",
-    hint: "cost per query round-trip (teaching model)",
+    hint: "custo por consulta, ida e volta (modelo didático)",
   },
 ];
 
 const TOGGLES: BenchToggleSpec[] = [
   {
     key: "strategy",
-    label: "Fetch strategy",
+    label: "Estratégia de busca",
     options: [
-      { value: "per-item", label: "Per-item (1 query per user)" },
-      { value: "batch", label: "Batch (IN lists)" },
+      { value: "per-item", label: "Por item (1 consulta por usuário)" },
+      { value: "batch", label: "Lote (listas IN)" },
       { value: "join", label: "JOIN" },
     ],
     default: "per-item",
-    hint: "switching strategy changes the plan, not the entities",
+    hint: "trocar a estratégia muda o plano, não as entidades",
   },
 ];
 
@@ -52,10 +52,10 @@ export function NPlusOneSandbox() {
     setPlan(result);
     setStrategyView(strategy);
     return {
-      headline: `${strategy}: ${result.count} queries · ${result.rows} rows · ${result.latencyMs} ms total`,
+      headline: `${strategy}: ${result.count} consultas · ${result.rows} linhas · ${result.latencyMs} ms no total`,
       detail: [
-        `Formula: ${result.formula}`,
-        `First queries: ${result.sql.slice(0, 2).join("  |  ")}${result.sql.length > 2 ? ` … (+${result.sql.length - 2} more)` : ""}`,
+        `Fórmula: ${result.formula}`,
+        `Primeiras consultas: ${result.sql.slice(0, 2).join("  |  ")}${result.sql.length > 2 ? ` … (+${result.sql.length - 2} mais)` : ""}`,
       ],
     };
   };
@@ -70,7 +70,7 @@ export function NPlusOneSandbox() {
       id="nplusone"
       specs={SPECS}
       toggleSpecs={TOGGLES}
-      actions={[{ key: "run", label: "Run fetch plan", variant: "primary" }]}
+      actions={[{ key: "run", label: "Executar plano de busca", variant: "primary" }]}
       onRun={onRun}
       onReset={onReset}
       instrument={
@@ -79,9 +79,9 @@ export function NPlusOneSandbox() {
             <div className="mb-3 grid grid-cols-3 gap-2 text-center">
               {(
                 [
-                  ["Queries", plan.count, "text-info"],
-                  ["Rows", plan.rows, "text-foreground"],
-                  ["Total cost", `${plan.latencyMs}ms`, strategyView === "per-item" ? "text-destructive" : "text-success"],
+                  ["Consultas", plan.count, "text-info"],
+                  ["Linhas", plan.rows, "text-foreground"],
+                  ["Custo total", `${plan.latencyMs}ms`, strategyView === "per-item" ? "text-destructive" : "text-success"],
                 ] as const
               ).map(([label, value, cls]) => (
                 <div key={label} className="rounded-xl border border-border bg-background/60 p-2">
@@ -92,7 +92,7 @@ export function NPlusOneSandbox() {
             </div>
             <div
               role="log"
-              aria-label="Query plan"
+              aria-label="Plano de consultas"
               className="scrollbar-thin h-32 overflow-y-auto rounded-lg border border-border bg-background/60 p-3 font-mono text-xs text-muted-foreground"
             >
               {plan.sql.map((sql, i) => (
@@ -107,7 +107,7 @@ export function NPlusOneSandbox() {
           </div>
         ) : (
           <p className="text-center text-xs text-muted-foreground">
-            [Ready] Predict which strategy pays more round-trips, then run the plan. The same user ids (user_id = 1…N) appear in every strategy.
+            [Pronto] Preveja qual estratégia paga mais idas e voltas, e depois execute o plano. Os mesmos ids de usuário (user_id = 1…N) aparecem em todas as estratégias.
           </p>
         )
       }

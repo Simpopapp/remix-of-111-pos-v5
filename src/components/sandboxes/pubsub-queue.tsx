@@ -6,37 +6,37 @@ import { BenchShell, type BenchRunContext } from "./bench-shell";
 const SPECS: BenchParamSpec[] = [
   {
     key: "workers",
-    label: "Workers / subscribers",
+    label: "Workers / assinantes",
     min: 1,
     max: 5,
     step: 1,
     default: 3,
-    hint: "competing: N workers share one queue · fan-out: N copies per event",
+    hint: "concorrentes: N workers dividem uma fila · fan-out: N cópias por evento",
   },
 ];
 
 const TOGGLES: BenchToggleSpec[] = [
   {
     key: "mode",
-    label: "Structure",
+    label: "Estrutura",
     options: [
-      { value: "competing", label: "Competing consumers" },
-      { value: "fanout", label: "Fan-out (topic)" },
+      { value: "competing", label: "Consumidores concorrentes" },
+      { value: "fanout", label: "Fan-out (tópico)" },
     ],
     default: "competing",
-    hint: "competing splits events between workers; fan-out delivers one copy each",
+    hint: "concorrentes dividem os eventos entre workers; fan-out entrega uma cópia a cada um",
   },
   {
     key: "failure",
-    label: "Failure kind",
+    label: "Tipo de falha",
     options: [
-      { value: "none", label: "None (healthy)" },
-      { value: "transient", label: "Transient (retry works)" },
-      { value: "poison", label: "Poison (never succeeds)" },
-      { value: "slow", label: "Slow consumer" },
+      { value: "none", label: "Nenhuma (saudável)" },
+      { value: "transient", label: "Transitória (retry funciona)" },
+      { value: "poison", label: "Venenosa (nunca funciona)" },
+      { value: "slow", label: "Consumidor lento" },
     ],
     default: "none",
-    hint: "distinct causes: transient retries, poison dead-letters, slow lags",
+    hint: "causas distintas: transitória re tenta, venenosa vai à dead-letter, lenta atrasa",
   },
 ];
 
@@ -63,7 +63,7 @@ export function PubSubQueueSandbox() {
   const [paused, setPaused] = useState(false);
   const [view, setView] = useState({ queueDepth: 0, processed: 0, dead: 0 });
   const [log, setLog] = useState<LogLine[]>([
-    { tone: "info", text: "[Ready] Predict: where does one event go in this structure?" },
+    { tone: "info", text: "[Pronto] Preveja: para onde vai um evento nesta estrutura?" },
   ]);
 
   const ensure = () => {
@@ -95,18 +95,18 @@ export function PubSubQueueSandbox() {
     if (r.outcome === "processed") {
       return {
         tone: "ok",
-        text: `Event #${r.event?.id} → worker #${r.worker} processed "${r.event?.payload}" (${totals.current.processed} done)`,
+        text: `Evento #${r.event?.id} → worker #${r.worker} processou "${r.event?.payload}" (${totals.current.processed} concluídos)`,
       };
     }
     if (r.outcome === "retry") {
       return {
         tone: "warn",
-        text: `Event #${r.event?.id} → worker #${r.worker} FAILED "${r.event?.payload}" (attempt ${r.event?.attempts}/${MAX_ATTEMPTS}) — back in the queue`,
+        text: `Evento #${r.event?.id} → worker #${r.worker} FALHOU "${r.event?.payload}" (tentativa ${r.event?.attempts}/${MAX_ATTEMPTS}) — de volta à fila`,
       };
     }
     return {
       tone: "err",
-      text: `Event #${r.event?.id} → worker #${r.worker} FAILED "${r.event?.payload}" ${MAX_ATTEMPTS}× — sent to the DEAD LETTER QUEUE`,
+      text: `Evento #${r.event?.id} → worker #${r.worker} FALHOU "${r.event?.payload}" ${MAX_ATTEMPTS}× — enviado para a DEAD LETTER QUEUE`,
     };
   };
 
@@ -137,21 +137,21 @@ export function PubSubQueueSandbox() {
       const ev = q.publish(payload);
       const snap = q.snapshot();
       if (cfg.current.mode === "fanout") {
-        push("info", `[PUB] Event #${ev.id} "${payload}" fanned out to ${cfg.current.workers} subscribers (one copy each).`);
+        push("info", `[PUB] Evento #${ev.id} "${payload}" distribuído para ${cfg.current.workers} assinantes (uma cópia para cada).`);
         return {
-          headline: `Published event #${ev.id} → copied to ${cfg.current.workers} subscribers`,
+          headline: `Evento #${ev.id} publicado → copiado para ${cfg.current.workers} assinantes`,
           detail: [
-            "Path: publish → one delivery per subscriber (fan-out structure).",
-            "Each subscriber's copy fails and retries independently.",
+            "Caminho: publish → uma entrega por assinante (estrutura fan-out).",
+            "A cópia de cada assinante falha e re tenta de forma independente.",
           ],
         };
       }
-      push("info", `[PUB] Event #${ev.id} "${payload}" queued → depth ${snap.queueDepth}.`);
+      push("info", `[PUB] Evento #${ev.id} "${payload}" enfileirado → profundidade ${snap.queueDepth}.`);
       return {
-        headline: `Published event #${ev.id} → queue depth ${snap.queueDepth}`,
+        headline: `Evento #${ev.id} publicado → fila com ${snap.queueDepth}`,
         detail: [
-          "Path: publish → shared queue → ONE worker picks it up (competing structure).",
-          "The other workers never see this event.",
+          "Caminho: publish → fila compartilhada → UM worker pega o evento (estrutura concorrente).",
+          "Os outros workers nunca veem este evento.",
         ],
       };
     }
@@ -179,12 +179,12 @@ export function PubSubQueueSandbox() {
     }
     refresh();
     return {
-      headline: `Stepped the queue ×5: ${processed} processed, ${dead} dead-lettered`,
+      headline: `Fila avançada ×5: ${processed} processados, ${dead} na dead-letter`,
       detail: [
-        outcomes.length > 0 ? outcomes.join(" · ") : "Nothing to process — the queue is idle.",
+        outcomes.length > 0 ? outcomes.join(" · ") : "Nada para processar — a fila está ociosa.",
         cfg.current.failure !== "none"
-          ? `Failure policy: ${cfg.current.failure} — maxAttempts ${MAX_ATTEMPTS} decides what reaches the DLQ.`
-          : "No failure configured: every delivery acks on the first attempt.",
+          ? `Política de falha: ${cfg.current.failure} — maxAttempts ${MAX_ATTEMPTS} decide o que chega à DLQ.`
+          : "Sem falha configurada: toda entrega confirma na primeira tentativa.",
       ],
     };
   };
@@ -202,7 +202,7 @@ export function PubSubQueueSandbox() {
     totals.current.dead += old?.dead ?? 0;
     push(
       "info",
-      `[CFG] Structure rebuilt: ${cfg.current.mode}, ${cfg.current.workers} workers, failure ${cfg.current.failure}. In-flight state of the old structure is dropped; counters preserved (${totals.current.processed} processed, ${totals.current.dead} dead).`,
+      `[CFG] Estrutura recriada: ${cfg.current.mode}, ${cfg.current.workers} workers, falha ${cfg.current.failure}. O estado em andamento da estrutura antiga é descartado; contadores preservados (${totals.current.processed} processados, ${totals.current.dead} mortos).`,
     );
     refresh();
   };
@@ -214,7 +214,7 @@ export function PubSubQueueSandbox() {
     ensure();
     setPaused(false);
     setView({ queueDepth: 0, processed: 0, dead: 0 });
-    setLog([{ tone: "info", text: "[Reset] Session restarted: empty queue, counters zeroed." }]);
+    setLog([{ tone: "info", text: "[Reinício] Sessão reiniciada: fila vazia, contadores zerados." }]);
   };
 
   return (
@@ -223,8 +223,8 @@ export function PubSubQueueSandbox() {
       specs={SPECS}
       toggleSpecs={TOGGLES}
       actions={[
-        { key: "publish", label: "Publish event", variant: "primary" },
-        { key: "step", label: "Process ×5 steps", variant: "secondary" },
+        { key: "publish", label: "Publicar evento", variant: "primary" },
+        { key: "step", label: "Avançar ×5 passos", variant: "secondary" },
       ]}
       onRun={onRun}
       onReset={onReset}
@@ -236,29 +236,29 @@ export function PubSubQueueSandbox() {
           onClick={() => {
             const next = !paused;
             setPaused(next);
-            push("info", next ? "[PAUSE] Auto-processing paused. The queue keeps what it has." : "[RESUME] Auto-processing resumed.");
+            push("info", next ? "[PAUSA] Processamento automático pausado. A fila mantém o que tem." : "[RETOMA] Processamento automático retomado.");
           }}
           className={
             "w-full rounded-xl border px-3 py-2 text-xs font-semibold transition-colors " +
             (paused ? "border-info/40 bg-info/10 text-info" : "border-border bg-secondary text-foreground hover:bg-accent")
           }
         >
-          {paused ? "Resume auto-processing" : "Pause auto-processing"}
+          {paused ? "Retomar processamento" : "Pausar processamento"}
         </button>
       }
       instrument={
         <div>
           <div className="mb-3 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl border border-border bg-background/60 p-2">
-              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">In queue</span>
+              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">Na fila</span>
               <span className="font-mono text-2xl font-extrabold text-warning">{view.queueDepth}</span>
             </div>
             <div className="rounded-xl border border-border bg-background/60 p-2">
-              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">Processed</span>
+              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">Processados</span>
               <span className="font-mono text-2xl font-extrabold text-success">{view.processed}</span>
             </div>
             <div className="rounded-xl border border-border bg-background/60 p-2">
-              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">Dead-lettered</span>
+              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">Na dead-letter</span>
               <span className={"font-mono text-2xl font-extrabold " + (view.dead > 0 ? "text-destructive" : "text-foreground")}>
                 {view.dead}
               </span>
@@ -266,12 +266,12 @@ export function PubSubQueueSandbox() {
           </div>
           {view.dead > 0 ? (
             <p className="mb-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-1.5 text-center text-xs font-bold text-destructive">
-              DEAD LETTER QUEUE: {view.dead} message{view.dead > 1 ? "s" : ""} — consequence of maxAttempts {MAX_ATTEMPTS}, awaiting human review
+              DEAD LETTER QUEUE: {view.dead} mensagem(ens) — consequência do maxAttempts {MAX_ATTEMPTS}, aguardando revisão humana
             </p>
           ) : null}
           <div
             role="log"
-            aria-label="Event trajectory log"
+            aria-label="Trajetória dos eventos"
             className="scrollbar-thin h-32 overflow-y-auto rounded-lg border border-border bg-background/60 p-3 font-mono text-xs text-muted-foreground"
           >
             {log.map((line, i) => (
