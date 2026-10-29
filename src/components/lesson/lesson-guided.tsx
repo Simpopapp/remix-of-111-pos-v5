@@ -49,7 +49,7 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
           Lesson {lesson.rev} · anchor lesson
         </p>
         <h2 className="mb-2 flex items-center gap-2 font-serif text-xl font-bold text-foreground">
-          <Target className="size-5 text-primary" /> Objective
+          <Target className="size-5 text-primary" /> Objetivo
         </h2>
         <p className="text-sm leading-relaxed text-foreground/90">{lesson.objective}</p>
       </section>
