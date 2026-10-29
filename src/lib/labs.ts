@@ -204,7 +204,7 @@ export const LABS: Record<SandboxId, LabBench> = {
         "Dois caminhos até o banco: a concatenação põe o texto do usuário dentro do texto SQL (código) e deixa as aspas reescreverem a cláusula; a parametrização envia o mesmo texto como valor (dado). Entradas fora do modelo recebem 'fora do modelo', não um veredito falso.",
     },
     evidence: [
-      "Explique a leitura de precedência de user='x' OR '1'='1' AND pass='secret' (o AND vince antes).",
+      "Explique a leitura de precedência de user='x' OR '1'='1' AND pass='secret' (o AND tem precedência).",
       "Mostre que o modo parametrizado ainda pode devolver linhas — quando o valor está literalmente correto.",
     ],
     interpretation:
