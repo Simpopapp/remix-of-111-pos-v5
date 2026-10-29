@@ -74,12 +74,12 @@ function groupAttempts(attempts: Attempt[]): ConfigGroup[] {
 }
 
 const STATE_CHIP: Record<BenchState, { label: string; className: string }> = {
-  "no-run": { label: "no run yet", className: "border-border bg-muted text-muted-foreground" },
-  "invalid-param": { label: "invalid parameter", className: "border-destructive/40 bg-destructive/10 text-destructive" },
-  partial: { label: "partial", className: "border-warning/40 bg-warning/10 text-warning" },
-  paused: { label: "paused", className: "border-info/40 bg-info/10 text-info" },
-  "out-of-model": { label: "out of model", className: "border-warning/40 bg-warning/10 text-warning" },
-  ready: { label: "evidence ready", className: "border-success/40 bg-success/10 text-success" },
+  "no-run": { label: "sem execução ainda", className: "border-border bg-muted text-muted-foreground" },
+  "invalid-param": { label: "parâmetro inválido", className: "border-destructive/40 bg-destructive/10 text-destructive" },
+  partial: { label: "parcial", className: "border-warning/40 bg-warning/10 text-warning" },
+  paused: { label: "pausado", className: "border-info/40 bg-info/10 text-info" },
+  "out-of-model": { label: "fora do modelo", className: "border-warning/40 bg-warning/10 text-warning" },
+  ready: { label: "evidência pronta", className: "border-success/40 bg-success/10 text-success" },
 };
 
 const ACTION_CLASS: Record<BenchAction["variant"], string> = {
@@ -130,12 +130,12 @@ export function BenchShell(props: BenchShellProps) {
     const errors = validateParams(props.specs, params);
     if (errors) {
       setParamErrors(errors);
-      setNotice("Invalid parameter — fix the highlighted control before running.");
+      setNotice("Parâmetro inválido — corrija o controle destacado antes de executar.");
       return;
     }
     setParamErrors(null);
     if (attempts.length === 0 && prediction.trim().length === 0) {
-      setNotice("Prediction required before the first run: write what you expect to observe.");
+      setNotice("Previsão exigida antes da primeira execução: escreva o que você espera observar.");
       return;
     }
     const attemptN = attempts.length + 1;
@@ -203,7 +203,7 @@ export function BenchShell(props: BenchShellProps) {
       originEvidenceIds: [evidence.id],
       body: `Hipótese: ${prediction}\nObservação: ${observation}\nInterpretação: ${interpretation}`,
     });
-    setNotice("Experiment report registered — it becomes notebook material in Progress.");
+    setNotice("Relatório de experimento registrado — ele vira material do caderno no Progresso.");
   };
 
   const chip = STATE_CHIP[state];
@@ -214,13 +214,13 @@ export function BenchShell(props: BenchShellProps) {
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 px-4 py-2">
         <div className="flex items-center gap-2">
           <FlaskConical className="size-4 text-primary" aria-hidden="true" />
-          <span className="font-serif text-sm font-semibold text-foreground">Workbench</span>
-          <span className={`rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${chip.className}`}>
+          <span className="font-serif text-sm font-semibold text-foreground">Bancada</span>
+          <span className={`rounded-full border px-2 py-0.5 font-mono text-[10px] tracking-wider ${chip.className}`}>
             {chip.label}
           </span>
         </div>
         <span className="font-mono text-xs text-muted-foreground">
-          {attempts.length} run{attempts.length === 1 ? "" : "s"} · {groups.length} config{groups.length === 1 ? "" : "s"}
+          {attempts.length} execução(ões) · {groups.length} configuração(ões)
         </span>
       </div>
 
@@ -284,7 +284,7 @@ export function BenchShell(props: BenchShellProps) {
 
         {/* Instrumento vivo + execução identificável */}
         <div className="space-y-4 p-4">
-          <div aria-label="Live instrument">{props.instrument}</div>
+          <div aria-label="Instrumento em tempo real">{props.instrument}</div>
 
           <div className="flex flex-wrap items-center gap-2">
             {props.actions.map((action, i) => (
@@ -294,17 +294,17 @@ export function BenchShell(props: BenchShellProps) {
                 onClick={() => run(action.key)}
                 className={"rounded-xl px-4 py-2 text-xs font-bold " + ACTION_CLASS[action.variant]}
               >
-                {i === 0 ? `${action.label} · run #${attempts.length + 1}` : action.label}
+                {i === 0 ? `${action.label} · execução #${attempts.length + 1}` : action.label}
               </button>
             ))}
             <button
               type="button"
               onClick={resetSession}
               className="ml-auto rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive"
-              title="Restart the session: clears runs, prediction and report draft."
+              title="Reinicia a sessão: apaga as execuções, a previsão e o rascunho do relatório."
             >
               <RotateCcw className="mr-1 inline size-3" aria-hidden="true" />
-              Restart session
+              Reiniciar sessão
             </button>
           </div>
 
@@ -315,25 +315,25 @@ export function BenchShell(props: BenchShellProps) {
           ) : null}
           {outOfModel ? (
             <p role="status" className="rounded-lg border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning">
-              Out of model: {outOfModel}
+              Fora do modelo: {outOfModel}
             </p>
           ) : null}
           {paramErrors ? (
             <p role="status" className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-              Invalid parameter: {Object.values(paramErrors).join("; ")}
+              Parâmetro inválido: {Object.values(paramErrors).join("; ")}
             </p>
           ) : null}
 
           {/* Faixa de registro — cada execução identificável */}
           <div>
-            <p className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Run record</p>
+            <p className="mb-1 text-[10px] tracking-wider text-muted-foreground">Registro de execuções</p>
             <div
               role="log"
-              aria-label="Run record"
+              aria-label="Registro de execuções"
               className="scrollbar-thin max-h-44 space-y-1 overflow-y-auto rounded-lg border border-border bg-background/60 p-3 font-mono text-xs text-muted-foreground"
             >
               {attempts.length === 0 ? (
-                <p>No runs yet — predict, then execute.</p>
+                <p>Nenhuma execução ainda — faça a previsão e execute.</p>
               ) : (
                 [...attempts].reverse().map((a) => (
                   <div key={a.n}>
@@ -351,7 +351,7 @@ export function BenchShell(props: BenchShellProps) {
             </div>
             {/* Único anúncio discreto: a última execução */}
             <div role="status" className="sr-only">
-              {latest ? `Run ${latest.n}: ${latest.observation.headline}` : ""}
+              {latest ? `Execução ${latest.n}: ${latest.observation.headline}` : ""}
             </div>
           </div>
         </div>
@@ -362,13 +362,13 @@ export function BenchShell(props: BenchShellProps) {
         <div className="border-t border-border/50 p-4">
           <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-foreground">
             <Scale className="size-3.5 text-primary" aria-hidden="true" />
-            Labeled comparison
+            Comparação rotulada
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {groups.slice(-2).map((g, i) => (
               <div key={g.label} className="rounded-lg border border-border bg-background/60 p-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                  Config {String.fromCharCode(65 + (groups.slice(-2).length - 1 - i))} · {g.runs.length} run{g.runs.length === 1 ? "" : "s"}
+                <p className="font-mono text-[10px] tracking-wider text-muted-foreground">
+                  Config {String.fromCharCode(65 + (groups.slice(-2).length - 1 - i))} · {g.runs.length} execução(ões)
                 </p>
                 <p className="mt-1 font-mono text-xs text-foreground">{g.label}</p>
                 <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
@@ -388,34 +388,34 @@ export function BenchShell(props: BenchShellProps) {
       <div className="space-y-3 border-t border-border/50 p-4">
         <div>
           <label htmlFor={`bench-${props.id}-prediction`} className="block text-xs font-semibold text-foreground">
-            Prediction (required before the first run)
+            Previsão <span className="font-normal text-muted-foreground">(exigida antes da primeira execução)</span>
           </label>
           <textarea
             id={`bench-${props.id}-prediction`}
             value={prediction}
             onChange={(e) => setPrediction(e.target.value)}
             rows={2}
-            placeholder="What do you expect to observe when you run?"
+            placeholder="O que você espera observar quando executar?"
             className="mt-1 w-full rounded-lg border border-border bg-background/60 px-2 py-1.5 text-xs text-foreground"
           />
         </div>
         <div>
           <label htmlFor={`bench-${props.id}-interpretation`} className="block text-xs font-semibold text-foreground">
-            Interpretation
+            Interpretação
           </label>
           <textarea
             id={`bench-${props.id}-interpretation`}
             value={interpretation}
             onChange={(e) => setInterpretation(e.target.value)}
             rows={2}
-            placeholder="What does the evidence show?"
+            placeholder="O que a evidência mostra?"
             className="mt-1 w-full rounded-lg border border-border bg-background/60 px-2 py-1.5 text-xs text-foreground"
           />
         </div>
         <div className="flex flex-wrap items-end gap-3">
           <div className="min-w-40 flex-1">
             <label htmlFor={`bench-${props.id}-verdict`} className="block text-xs font-semibold text-foreground">
-              Verdict <span className="font-normal text-muted-foreground">(optional)</span>
+              Veredito <span className="font-normal text-muted-foreground">(opcional)</span>
             </label>
             <input
               id={`bench-${props.id}-verdict`}
@@ -431,12 +431,12 @@ export function BenchShell(props: BenchShellProps) {
             className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Save className="mr-1 inline size-3" aria-hidden="true" />
-            Save experiment report
+            Salvar relatório
           </button>
         </div>
         <p role="status" className="text-[10px] text-muted-foreground">
           {readiness.state === "ready"
-            ? "Ready to register: hypothesis, labeled config, observation and interpretation."
+            ? "Pronto para registrar: hipótese, configuração rotulada, observação e interpretação."
             : readiness.reason}
         </p>
       </div>
