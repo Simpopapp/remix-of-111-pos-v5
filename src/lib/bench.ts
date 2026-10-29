@@ -76,11 +76,11 @@ export function validateParams(
   for (const spec of specs) {
     const v = values[spec.key];
     if (typeof v !== "number" || !Number.isFinite(v)) {
-      errors[spec.key] = `${spec.label}: value required`;
+      errors[spec.key] = `${spec.label}: informe um valor`;
       continue;
     }
     if (v < spec.min || v > spec.max) {
-      errors[spec.key] = `${spec.label}: ${v} is out of range (${spec.min}–${spec.max}${spec.unit ? " " + spec.unit : ""})`;
+      errors[spec.key] = `${spec.label}: ${v} está fora do intervalo (${spec.min}–${spec.max}${spec.unit ? " " + spec.unit : ""})`;
     }
   }
   return Object.keys(errors).length > 0 ? errors : null;
@@ -159,13 +159,13 @@ export function reportReadiness(input: {
   interpretation: string;
 }): ReportReadiness {
   if (input.attempts.length === 0) {
-    return { state: "blocked", reason: "No evidence yet: run the experiment first." };
+    return { state: "blocked", reason: "Ainda sem evidência: execute o experimento primeiro." };
   }
   if (input.hypothesis.trim().length === 0) {
-    return { state: "blocked", reason: "Prediction missing: write what you expect before running." };
+    return { state: "blocked", reason: "Previsão faltando: escreva o que você espera antes de executar." };
   }
   if (input.interpretation.trim().length === 0) {
-    return { state: "blocked", reason: "Interpretation missing: write what the evidence shows." };
+    return { state: "blocked", reason: "Interpretação faltando: escreva o que a evidência mostra." };
   }
   return { state: "ready" };
 }
