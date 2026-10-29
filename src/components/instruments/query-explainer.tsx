@@ -77,27 +77,27 @@ export function QueryExplainerInstrument({
       className="min-w-0 space-y-4 text-foreground"
     >
       <figcaption id={titleId} className="text-sm font-semibold break-words">
-        Query / contract explainer — {spec.caption}
+        Explicador de consulta / contrato — {spec.caption}
       </figcaption>
 
-      <section aria-label="Statement" className="min-w-0">
-        <h3 className="mb-2 text-sm font-semibold">Statement</h3>
+      <section aria-label="Consulta" className="min-w-0">
+        <h3 className="mb-2 text-sm font-semibold">Consulta</h3>
         <pre className="max-w-full rounded border border-border bg-background/60 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
           <code>{data.statement}</code>
         </pre>
       </section>
 
       <p className="text-xs text-muted-foreground">
-        Read steps from top to bottom. Numbering is the supplied explanatory
-        order, not evidence that a database executes all work sequentially.
-        Costs retain the units and assumptions supplied by the lesson.
+        Leia os passos de cima para baixo. A numeração é a ordem explicativa
+        fornecida, não uma prova de que o banco executa todo o trabalho em
+        sequência. Os custos mantêm as unidades e premissas dadas pela aula.
       </p>
 
-      {renderPlan("Main plan", data.plan)}
+      {renderPlan("Plano principal", data.plan)}
 
       {data.versions && data.versions.length > 0 ? (
-        <section aria-label="Version comparison" className="min-w-0 space-y-3">
-          <h3 className="text-sm font-semibold">Compare versions</h3>
+        <section aria-label="Comparação de versões" className="min-w-0 space-y-3">
+          <h3 className="text-sm font-semibold">Comparar versões</h3>
           <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
             {data.versions.map((version, index) => (
               <div key={index} className="min-w-0">

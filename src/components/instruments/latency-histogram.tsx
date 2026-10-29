@@ -22,7 +22,7 @@ export function LatencyHistogramInstrument({ data }: { data: HistogramData }) {
   const total = data.sample.length;
   const max = data.sample.length ? data.sample[data.sample.length - 1]! : 0;
   const markerText = data.markers.map((m) => `${m.label} = ${m.value} ${data.unit}`).join("; ");
-  const summary = `Histogram of ${total} request timings in ${data.unit}. ${markerText}. Maximum = ${max} ${data.unit}. Bins: ${data.bins
+  const summary = `Histograma de ${total} tempos de requisição em ${data.unit}. ${markerText}. Máximo = ${max} ${data.unit}. Faixas: ${data.bins
     .map((b) => `${b.from}–${b.to}: ${b.count}`)
     .join("; ")}.`;
   return (
@@ -72,7 +72,7 @@ export function LatencyHistogramInstrument({ data }: { data: HistogramData }) {
         </div>
         <div
           role="region"
-          aria-label="Ordered sample"
+          aria-label="Amostra ordenada"
           tabIndex={0}
           className="scrollbar-thin max-h-40 overflow-y-auto px-2 py-1.5 font-mono text-xs leading-relaxed text-muted-foreground"
         >
