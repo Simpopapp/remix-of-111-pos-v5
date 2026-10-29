@@ -41,7 +41,7 @@ export const Route = createFileRoute("/labs/$id")({
   head: ({ params }) => {
     const meta = isSandboxId(params.id) ? SANDBOXES.find((s) => s.id === params.id) : undefined;
     const title = meta ? `${meta.title} Lab — VibeCoder Academy` : "Lab — VibeCoder Academy";
-    const description = meta?.blurb ?? "Interactive production lab.";
+    const description = meta?.blurb ?? "Laboratório interativo de produção.";
     return {
       meta: [
         { title },

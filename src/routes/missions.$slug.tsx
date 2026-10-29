@@ -29,7 +29,7 @@ export const Route = createFileRoute("/missions/$slug")({
     const title = mission
       ? `${mission.title} — Missions — VibeCoder Academy`
       : "Mission — VibeCoder Academy";
-    const description = mission ? mission.problem : "An integrated learning mission.";
+    const description = mission ? mission.problem : "Missão integrada de aprendizagem.";
     return {
       meta: [
         { title },
