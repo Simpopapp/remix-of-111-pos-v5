@@ -34,7 +34,7 @@ export function RequestFlowInstrument({ data }: { data: RequestFlowData }) {
   const nodeName = (id: string) => data.nodes.find((n) => n.id === id)?.label ?? id;
   const totalAccepted = data.window.reduce((s, w) => s + w.accepted, 0);
   const totalRejected = data.window.reduce((s, w) => s + w.rejected, 0);
-  const summary = `Instrument: request-flow. ${data.window.length} window rows: ${totalAccepted} accepted ("ok") and ${totalRejected} rejected ("x"). Nodes: ${data.nodes
+  const summary = `Instrumento: fluxo de requisição. ${data.window.length} linhas de janela: ${totalAccepted} aceitas ("ok") e ${totalRejected} rejeitadas ("x"). Nós: ${data.nodes
     .map((n) => `${n.label} (${KIND_LABEL[n.kind]})`)
     .join(", ")}. Edges: ${data.edges
     .map((e) => `${nodeName(e.from)} → ${nodeName(e.to)}${e.label ? ` — ${e.label}` : ""}`)
