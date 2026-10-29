@@ -28,11 +28,11 @@ const stateLabel = (data: StateMachineData, id: string) =>
 /** Renderizador do instrumento state-machine (representação + equivalente textual visível). */
 export function StateMachineInstrument({ data }: { data: StateMachineData }) {
   const nowState = data.states.find((s) => s.id === data.now);
-  const summary = `Instrument: state-machine. Current state: ${stateLabel(data, data.now)}${
+  const summary = `Instrumento: máquina de estados. Estado atual: ${stateLabel(data, data.now)}${
     nowState ? ` (${nowState.tone})` : ""
   }. States: ${data.states.map((s) => `${s.label} (${s.tone})`).join("; ")}. Transitions: ${data.transitions
     .map((t) => `${stateLabel(data, t.from)} → ${stateLabel(data, t.to)} — trigger: ${t.trigger}`)
-    .join("; ")}.${data.budget ? ` Budget: ${data.budget.label}, ${data.budget.ms} ms.` : ""}`;
+    .join("; ")}.${data.budget ? ` Orçamento: ${data.budget.label}, ${data.budget.ms} ms.` : ""}`;
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -65,7 +65,7 @@ export function StateMachineInstrument({ data }: { data: StateMachineData }) {
 
       {data.budget ? (
         <div className="mb-3 rounded-lg border border-border/60 bg-background/60 px-3 py-2 font-mono text-xs text-muted-foreground">
-          budget: {data.budget.label} · {data.budget.ms} ms
+          orçamento: {data.budget.label} · {data.budget.ms} ms
         </div>
       ) : null}
 

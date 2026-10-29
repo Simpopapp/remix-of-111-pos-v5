@@ -59,19 +59,19 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
       <Section icon={ScrollText} title="Situação">
         <dl className="space-y-2 text-sm">
           <div>
-            <dt className="font-semibold text-foreground">System</dt>
+            <dt className="font-semibold text-foreground">Sistema</dt>
             <dd className="text-muted-foreground">{lesson.scenario.system}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Data</dt>
+            <dt className="font-semibold text-foreground">Dado</dt>
             <dd className="text-muted-foreground">{lesson.scenario.data}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Symptom</dt>
+            <dt className="font-semibold text-foreground">Sintoma</dt>
             <dd className="text-muted-foreground">{lesson.scenario.symptom}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Constraints</dt>
+            <dt className="font-semibold text-foreground">Restrições</dt>
             <dd className="text-muted-foreground">
               <ul className="list-inside list-disc">
                 {lesson.scenario.constraints.map((c, i) => (
@@ -81,7 +81,7 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
             </dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Baseline</dt>
+            <dt className="font-semibold text-foreground">Linha de base</dt>
             <dd className="text-muted-foreground">{lesson.scenario.baseline}</dd>
           </div>
         </dl>
