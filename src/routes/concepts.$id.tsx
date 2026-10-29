@@ -92,7 +92,7 @@ function ConceptDetailPage() {
           search={{}}
           className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
         >
-          <ArrowLeft className="size-3.5" /> All concepts
+          <ArrowLeft className="size-3.5" /> Todos os conceitos
         </Link>
       </div>
 
@@ -177,7 +177,7 @@ function ConceptDetailPage() {
               params={{ id: relatedSandbox.id }}
               className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-accent-2 px-3 py-2 text-xs font-semibold text-accent-2-foreground transition-transform active:scale-95"
             >
-              Open lab <ArrowRight className="size-3.5" />
+              Abrir laboratório <ArrowRight className="size-3.5" />
             </Link>
           </div>
         </div>
