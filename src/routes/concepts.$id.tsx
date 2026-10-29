@@ -201,7 +201,7 @@ function ConceptDetailPage() {
                   ? "bg-warning text-warning-foreground"
                   : "bg-secondary text-foreground hover:bg-accent")
             }
-            title="Application record: self-declaration about your own app — never counted as learning evidence"
+            title="Registro de aplicação: autodeclaração sobre o seu app — nunca contada como evidência de aprendizagem"
           >
             {implemented ? (
               <CheckCircle2 className="size-4" />
@@ -211,16 +211,16 @@ function ConceptDetailPage() {
               <Circle className="size-4" />
             )}
             {implemented
-              ? "Recorded in my app"
+              ? "Registrado no meu app"
               : notApplicable
-                ? "Not applicable to my app"
-                : "Record in my app"}
+                ? "Não se aplica ao meu app"
+                : "Registrar no meu app"}
           </button>
           <p className="mt-1.5 text-xs text-muted-foreground">
-            Application record — self-declaration, kept apart from practice and
-            progress. Manage notes in{" "}
+            Registro de aplicação — autodeclaração, separada da prática e do
+            progresso. Gerencie as anotações em{" "}
             <Link to="/readiness" className="text-primary underline-offset-2 hover:underline">
-              My app
+              Meu app
             </Link>
             .
           </p>

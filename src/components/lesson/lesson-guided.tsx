@@ -91,7 +91,7 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
 
       {revealed ? (
         <>
-          <Section icon={Brain} title="Mental model">
+          <Section icon={Brain} title="Seu modelo mental">
             <p className="mb-3 text-sm leading-relaxed text-foreground/90">
               {lesson.mentalModel.definition}
             </p>

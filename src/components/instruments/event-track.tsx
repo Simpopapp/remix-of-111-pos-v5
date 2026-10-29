@@ -13,22 +13,22 @@ interface Props {
 const STATUS = {
   info: {
     symbol: "●",
-    label: "Info",
+    label: "Informativo",
     className: "text-info",
   },
   success: {
     symbol: "✓",
-    label: "Success",
+    label: "Sucesso",
     className: "text-success",
   },
   warn: {
     symbol: "▲",
-    label: "Warning",
+    label: "Atenção",
     className: "text-warning",
   },
   fail: {
     symbol: "✕",
-    label: "Failure",
+    label: "Falha",
     className: "text-destructive",
   },
 } as const;

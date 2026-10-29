@@ -10,13 +10,13 @@ export const Route = createFileRoute("/missions/")({
       {
         name: "description",
         content:
-          "Integrated missions on a recurring scenario: predict, experiment, decide, transfer and write the dossier — the full learning cycle in order.",
+          "Missões integradas num cenário recorrente: prever, experimentar, decidir, transferir e escrever o dossiê — o ciclo completo de aprendizagem, em ordem.",
       },
       { property: "og:title", content: "Missions — VibeCoder Academy" },
       {
         property: "og:description",
         content:
-          "Investigation missions on the Digital Store scenario — no answer revealed in advance.",
+          "Missões de investigação no cenário da Loja Digital — nenhuma resposta revelada de antemão.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

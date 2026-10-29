@@ -20,13 +20,13 @@ export const Route = createFileRoute("/sandboxes")({
       {
         name: "description",
         content:
-          "Six focused labs: rate limiting, circuit breaking, N+1 queries, SQL injection, queues and tail latency. Each card states the phenomenon, the real controls, the competence it builds and its limits.",
+          "Seis laboratórios focados: rate limiting, circuit breaking, consultas N+1, SQL injection, filas e latência de cauda. Cada card declara o fenômeno, os controles reais, a competência que constrói e os limites.",
       },
       { property: "og:title", content: "Labs — VibeCoder Academy" },
       {
         property: "og:description",
         content:
-          "Six focused labs with an explicit workbench: predict, run, observe and report. Phenomenon, controls, competence and limits stated up front.",
+          "Seis laboratórios focados com uma bancada explícita: prever, executar, observar e relatar. Fenômeno, controles, competência e limites declarados de antemão.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

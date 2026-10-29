@@ -21,7 +21,7 @@ export function ConceptCard({ concept }: ConceptCardProps) {
         to="/concepts/$id"
         params={{ id: String(concept.id) }}
         className="absolute inset-0 z-10 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
-        aria-label={`Open concept #${concept.id}: ${concept.name}`}
+        aria-label={`Abrir conceito #${concept.id}: ${concept.name}`}
       />
 
       <div className="relative">
@@ -53,10 +53,10 @@ export function ConceptCard({ concept }: ConceptCardProps) {
           }
         >
           <Layers className="size-3" />
-          {deep ? "Deep lesson" : "Quick reference"}
+          {deep ? "Aula profunda" : "Referência rápida"}
         </span>
         <span className="flex items-center gap-1 font-mono text-muted-foreground transition-colors group-hover:text-foreground">
-          Study or practice
+          Estudar ou praticar
           <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
         </span>
       </div>
