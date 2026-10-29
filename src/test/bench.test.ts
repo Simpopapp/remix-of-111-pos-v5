@@ -42,7 +42,7 @@ describe("bancada unificada — contrato (F4/D6)", () => {
   it("parâmetro fora da faixa é nomeado, não silenciado", () => {
     const errors = validateParams(SPECS, { capacity: 99, refillMs: 1500 });
     expect(errors).not.toBeNull();
-    expect(errors!["capacity"]).toContain("out of range");
+    expect(errors!["capacity"]).toContain("fora do intervalo");
     expect(errors!["capacity"]).toContain("1–10");
   });
 
