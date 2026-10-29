@@ -243,7 +243,7 @@ export function PracticeTask({ task }: { task: Task }) {
             }}
             className="rounded-xl border border-border bg-secondary px-3 py-2 text-xs text-foreground transition-colors hover:bg-accent"
           >
-            Try again
+            Tentar de novo
           </button>
         </div>
       ) : null}
