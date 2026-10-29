@@ -120,10 +120,10 @@ function denominatorLabel(dim: Dimension, scopeNoun: string, denominator: number
       return `${denominator} ${scopeNoun}`;
     case "practiced":
     case "demonstrated":
-      return `${denominator} ${scopeNoun} have practice tasks`;
+      return `${denominator} ${scopeNoun} têm tarefas de prática`;
     case "transferred":
     case "retained":
-      return `${denominator} ${scopeNoun} have transfer variants`;
+      return `${denominator} ${scopeNoun} têm variantes de transferência`;
   }
 }
 
