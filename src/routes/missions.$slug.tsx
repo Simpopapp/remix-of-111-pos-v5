@@ -535,7 +535,7 @@ function MissionPage() {
               value={dossier}
               onChange={(e) => setDossier(e.target.value)}
               rows={8}
-              placeholder="Derived from your reasoning below — edit freely."
+              placeholder="Derivado do seu raciocínio abaixo — edite à vontade."
               className="mt-1.5 w-full rounded-lg border border-ink-muted/40 bg-white/70 p-3 text-sm text-ink placeholder:text-ink-muted/70 focus:border-primary focus:outline-none"
             />
             <p className="mt-1 text-xs text-ink-muted">
