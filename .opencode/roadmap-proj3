@@ -88,11 +88,15 @@ E2E das telas tocadas · nenhum teste contratado enfraquecido.
 - [x] F7 concluída (gates acima verdes)
 
 ## F8 — Acabamento transversal (PRD §3/F8)
-- [ ] Tabela de estados §15 aplicada nas telas novas
-- [ ] Teclado completo; equivalentes que respondem à pergunta; reduced-motion
-- [ ] Mobile recomposto (não empilhado); idioma pt-BR na UI
-- Gates F8: tsgo · vitest · build · e2e_f8_keyboard
-- [ ] F8 concluída
+- [x] Tabela de estados §15 aplicada nas telas novas
+- [x] Teclado completo; equivalentes que respondem à pergunta; reduced-motion
+- [x] Mobile recomposto (não empilhado); idioma pt-BR na UI
+- Gates F8: tsgo limpo · vitest 196/196 (strings fixadas de bench/progress
+  atualizadas ao idioma novo, semântica intacta) · build OK ·
+  e2e_f8_keyboard verde (16 passos: teclado em aula+lab+missão, estados por
+  tela, vazio orientado; 0 pageerrors) · mobile 390×844 sem overflow nas 6
+  telas · nenhum teste contratado enfraquecido
+- [x] F8 concluída (gates acima verdes)
 
 ## F9 — Conteúdo: percursos fechados e honestidade (PRD §3/F9, contínuo)
 - [ ] Auditoria dos 111 conceitos pelos 8 critérios; elos frágeis primeiro
@@ -104,6 +108,7 @@ E2E das telas tocadas · nenhum teste contratado enfraquecido.
 ## Encerramento
 - Reporte ao monitor (seção 20 do plan.md) e registre "remix finalizado (+N)"
   por grande objetivo concluído; linha "Próximo remix:" aponta a fase pendente.
-- Próximo remix: **F8 — Acabamento transversal** (tabela de estados §15,
-  teclado completo, mobile recomposto, passada pt-BR na UI; F6 e F7
-  concluídas neste remix — stage-12).
+- Próximo remix: **F9 — Conteúdo: percursos fechados e honestidade** (auditoria
+  dos 111 conceitos pelos 8 critérios; elos frágeis primeiro; reviewed só com
+  revisão efetiva — F6 e F7 no remix anterior, F8 concluída neste remix —
+  stage-13).
