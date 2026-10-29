@@ -46,7 +46,7 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
     <div>
       <section className="mb-8 rounded-2xl border border-primary/30 bg-primary/5 p-5">
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Lesson {lesson.rev} · anchor lesson
+          Aula {lesson.rev} · aula âncora
         </p>
         <h2 className="mb-2 flex items-center gap-2 font-serif text-xl font-bold text-foreground">
           <Target className="size-5 text-primary" /> Objetivo
