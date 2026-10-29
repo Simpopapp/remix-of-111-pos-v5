@@ -81,7 +81,7 @@ function ConceptDetailPage() {
       <div className="flex items-center justify-between border-b border-border/60 pb-4">
         <div className="flex items-center gap-2">
           <span className="rounded border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-xs font-bold text-primary">
-            Concept #{concept.id}
+            Conceito #{concept.id}
           </span>
           <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             {concept.cat}
@@ -122,10 +122,10 @@ function ConceptDetailPage() {
         <div className="mt-6 space-y-4">
           <div className="rounded-xl border border-border/60 bg-card/40 p-3 text-xs leading-relaxed text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 font-semibold text-foreground">
-              <Info className="size-3.5" /> Honest coverage note:
+              <Info className="size-3.5" /> Nota honesta de cobertura:
             </span>{" "}
-            this lesson does not have the deep version yet — the classic summary below remains
-            valid as a quick reference.
+            esta aula ainda não tem a versão profunda — o resumo clássico abaixo continua
+            válido como referência rápida.
           </div>
           {/* Blocos legados sobre papel (planejamento §15.2 / PRD D12): cor no
               ícone, texto em ink — a cor deixa de rotular o bloco. */}
@@ -134,7 +134,7 @@ function ConceptDetailPage() {
               <span className="text-primary">
                 <Info className="inline size-3.5" />
               </span>
-              Like you're 10 years old (ELI10)
+              Como se você tivesse 10 anos (ELI10)
             </h4>
             <p className="text-sm leading-relaxed text-ink">{concept.eli}</p>
           </section>
@@ -144,7 +144,7 @@ function ConceptDetailPage() {
               <span className="text-destructive">
                 <Info className="inline size-3.5" />
               </span>
-              Why vibe coders break it in production
+              Por que vibe coders quebram isso em produção
             </h4>
             <p className="text-sm leading-relaxed text-ink">{concept.risk}</p>
           </section>
@@ -154,7 +154,7 @@ function ConceptDetailPage() {
               <span className="text-success">
                 <Info className="inline size-3.5" />
               </span>
-              Production architectural solution
+              Solução arquitetural de produção
             </h4>
             <p className="text-sm leading-relaxed text-ink">{concept.fix}</p>
           </section>
@@ -166,10 +166,10 @@ function ConceptDetailPage() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <span className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
-                See it in action
+                Veja em ação
               </span>
               <div className="text-sm font-bold text-foreground">
-                Interactive Sandbox #{relatedSandbox.num}: {relatedSandbox.title}
+                Laboratório interativo #{relatedSandbox.num}: {relatedSandbox.title}
               </div>
             </div>
             <Link
