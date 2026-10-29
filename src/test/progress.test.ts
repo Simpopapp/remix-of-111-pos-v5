@@ -141,8 +141,8 @@ describe("progress — visão agregada e denominadores rotulados", () => {
     expect(o.totals.practiced.denominator).toBeGreaterThan(0);
     expect(o.totals.practiced.denominator).toBeLessThan(111);
     expect(o.totals.transferred.denominator).toBeGreaterThan(0);
-    expect(o.totals.practiced.denominatorLabel).toContain("have practice tasks");
-    expect(o.totals.transferred.denominatorLabel).toContain("have transfer variants");
+    expect(o.totals.practiced.denominatorLabel).toContain("têm tarefas de prática");
+    expect(o.totals.transferred.denominatorLabel).toContain("têm variantes de transferência");
   });
 
   it("contagem reflete o estado; ativos ficam inspecionáveis", () => {

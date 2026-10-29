@@ -51,7 +51,7 @@ export const DIMENSION_MEANING: Record<Dimension, string> = {
 export interface DimensionStat {
   count: number;
   denominator: number;
-  /** Denominador explícito e honesto, ex.: "3 of 111 concepts have deep lessons". */
+  /** Denominador explícito e honesto, ex.: "3 de 111 conceitos têm aulas profundas". */
   denominatorLabel: string;
 }
 
@@ -203,7 +203,7 @@ export function progressOverview(state: LearningState): ProgressOverview {
     totals[d] = stat(
       counts[d],
       denominators[d],
-      denominatorLabel(d, "concepts", denominators[d]),
+      denominatorLabel(d, "conceitos", denominators[d]),
     );
   }
 
@@ -236,7 +236,7 @@ export function progressOverview(state: LearningState): ProgressOverview {
         dims[d] = stat(
           catCounts[d],
           catDenominators[d],
-          denominatorLabel(d, "concepts", catDenominators[d]),
+          denominatorLabel(d, "conceitos", catDenominators[d]),
         );
       }
       return { cat, concepts: ids.length, dims };
