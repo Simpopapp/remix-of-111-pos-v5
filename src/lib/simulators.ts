@@ -73,7 +73,7 @@ export const SANDBOXES: SandboxMeta[] = [
     num: 1,
     title: "Rate Limiter",
     blurb:
-      "Token bucket: 5 tokens, 1 refill every 1.5s. Click fast and watch 429s appear.",
+      "Token bucket: 5 tokens, 1 reabastecimento a cada 1,5 s. Clique rápido e veja os 429 aparecerem.",
     conceptIds: [1, 13],
   },
   {
@@ -81,7 +81,7 @@ export const SANDBOXES: SandboxMeta[] = [
     num: 2,
     title: "Circuit Breaker",
     blurb:
-      "Closed → open → half-open. Trip the breaker with 3 downstream failures.",
+      "Closed → open → half-open. Faça o disjuntor abrir com 3 falhas do serviço de baixo.",
     conceptIds: [10, 11, 12],
   },
   {
@@ -89,7 +89,7 @@ export const SANDBOXES: SandboxMeta[] = [
     num: 3,
     title: "N+1 Visualizer",
     blurb:
-      "Compare per-item, batch and JOIN under the same data. Watch the round-trips collapse.",
+      "Compare por item, lote e JOIN sobre os mesmos dados. Veja as idas e voltas colapsarem.",
     conceptIds: [27, 25, 26],
   },
   {
@@ -97,7 +97,7 @@ export const SANDBOXES: SandboxMeta[] = [
     num: 4,
     title: "SQL Injection",
     blurb:
-      "String concatenation vs parameterized queries — see the attack short-circuit.",
+      "Concatenação de strings vs consultas parametrizadas — veja o ataque curto-circuitar.",
     conceptIds: [78, 79, 74],
   },
   {
@@ -105,7 +105,7 @@ export const SANDBOXES: SandboxMeta[] = [
     num: 5,
     title: "Pub/Sub + Queue",
     blurb:
-      "Competing consumers vs fan-out, with transient, poison and slow-consumer failures.",
+      "Consumidores concorrentes vs fan-out, com falhas transitória, venenosa e consumidor lento.",
     conceptIds: [15, 16, 17, 20],
   },
   {
@@ -113,7 +113,7 @@ export const SANDBOXES: SandboxMeta[] = [
     num: 6,
     title: "P99 & Tail Latency",
     blurb:
-      "100 requests, one long tail. See why p99 hurts more than the average.",
+      "100 requisições, uma cauda longa. Veja por que o p99 machuca mais que a média.",
     conceptIds: [93, 94, 91, 92],
   },
 ];
