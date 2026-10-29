@@ -39,12 +39,12 @@ export const DIMENSION_LABELS: Record<Dimension, string> = {
 
 /** O que a dimensão significa — e o que ela NÃO significa (planejamento §14.1). */
 export const DIMENSION_MEANING: Record<Dimension, string> = {
-  contact: "You opened this lesson. Says nothing about understanding.",
-  practiced: "You attempted at least one task, with whatever help you used.",
-  demonstrated: "You met every criterion of a task without decisive help.",
-  transferred: "You solved a variant task — different names, same principle.",
-  retained: "You recovered a variant after the scheduled interval.",
-  applied: "You registered use in your own app. Self-declaration, never proof.",
+  contact: "Você abriu esta aula. Não diz nada sobre compreensão.",
+  practiced: "Você tentou ao menos uma tarefa, com a ajuda que precisou.",
+  demonstrated: "Você atendeu a todos os critérios de uma tarefa sem ajuda decisiva.",
+  transferred: "Você resolveu uma tarefa variante — nomes diferentes, mesmo princípio.",
+  retained: "Você recuperou uma variante após o intervalo programado.",
+  applied: "Você registrou uso no seu app. Autodeclaração, nunca prova.",
 };
 
 /** Contagem por dimensão com denominador rotulado (PRD D9). */
