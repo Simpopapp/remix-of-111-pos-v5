@@ -6,12 +6,12 @@
 
 ## Resumo
 
-Rodada de remix concluída sobre a fase **F8 — Acabamento transversal** do `roadmap-proj3` (PRD §3/F8, §15–§17 do planejamento, D4/D10). Entregue: passada pt-BR em toda a UI e no feedback do motor das telas novas (bancada, 6 laboratórios, instrumentos, catálogos, aula, missões, biblioteca, progresso, Meu app, caderno e meta das rotas), conferência de uppercase (restam só kickers curtos), teclado completo verificado por E2E em aula+laboratório+missão, equivalentes textuais dos instrumentos, reduced-motion, e mobile verificado a 390×844 sem overflow.
+Rodada de remix concluída sobre a fase **F8 — Acabamento transversal** do `roadmap-proj3` (PRD §3/F8, §15–§17 do planejamento, D4/D10). Entregue: passada pt-BR em toda a UI e no feedback do motor das telas novas (bancada, 6 laboratórios, instrumentos, catálogos, aula, missões, biblioteca, progresso, Meu app, caderno e meta das rotas), conferência de uppercase (restam só kickers curtos), teclado completo verificado por E2E em aula+laboratório+missão, equivalentes textuais dos instrumentos, reduced-motion, e mobile verificado a 390×844 sem overflow. Varredura final cobriu rótulos estruturais da aula, sumários acessíveis das máquinas de estados e do fluxo de requisição e kickers dos modos de aula. Conteúdo editorial e motor `simulators.ts` seguem em inglês por D4.
 
 ## Gates (reproduzidos)
 
 - `bunx tsgo --noEmit`: limpo.
-- `bunx vitest run`: 196/196 (strings fixadas de `bench.test` e `progress.test` atualizadas ao idioma novo; mesmas asserções semânticas; `simulators.test` intocado).
+- `bunx vitest run`: 196/196 (reexecutado após a varredura final) (strings fixadas de `bench.test` e `progress.test` atualizadas ao idioma novo; mesmas asserções semânticas; `simulators.test` intocado).
 - Build do preview: build OK (build-errors.log 02:26Z).
 - E2E `e2e_f8_keyboard`: 16 passos, 0 falhas, 0 pageerrors.
 
