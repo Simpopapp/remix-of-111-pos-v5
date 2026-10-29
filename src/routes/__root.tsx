@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Learn the 111 architecture concepts that keep vibe-coded apps alive in production — ELI10 explanations, real risks, and interactive simulations.",
+          "Aprenda os 111 conceitos de arquitetura que mantêm apps vibe-coded vivos em produção — explicações ELI10, riscos reais e simulações interativas.",
       },
       {
         property: "og:title",
@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Learn the 111 architecture concepts that keep vibe-coded apps alive in production — ELI10 explanations, real risks, and interactive simulations.",
+          "Aprenda os 111 conceitos de arquitetura que mantêm apps vibe-coded vivos em produção — explicações ELI10, riscos reais e simulações interativas.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

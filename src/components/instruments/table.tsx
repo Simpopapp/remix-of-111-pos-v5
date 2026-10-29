@@ -76,13 +76,13 @@ export function TableInstrument({
                   {column.emphasis ? (
                     <>
                       <span aria-hidden="true">★ </span>
-                      <span className="sr-only">Emphasized column: </span>
+                      <span className="sr-only">Coluna em destaque: </span>
                     </>
                   ) : null}
                   {canInspect ? (
                     <button
                       type="button"
-                      aria-label={`Inspect column ${column.label}`}
+                      aria-label={`Inspecionar coluna ${column.label}`}
                       onClick={() => onInspect?.(column.key)}
                       className="rounded text-left underline underline-offset-4"
                     >
@@ -121,7 +121,7 @@ export function TableInstrument({
                           </span>
                         ) : null}
                         <span>
-                          {value === undefined ? "Not supplied" : value}
+                          {value === undefined ? "Não informado" : value}
                         </span>
                       </td>
                     );

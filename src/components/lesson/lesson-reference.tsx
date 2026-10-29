@@ -12,7 +12,7 @@ export function ReferenceLesson({ lesson, conceptId }: { lesson: Lesson; concept
     <div>
       <section className="mb-8 rounded-2xl border border-border/70 bg-card/40 p-5">
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Lesson {lesson.rev} · consulta rápida
+          Aula {lesson.rev} · consulta rápida
         </p>
         <h2 className="mb-2 flex items-center gap-2 font-serif text-xl font-bold text-foreground">
           <BookOpen className="size-5 text-primary" /> Definição

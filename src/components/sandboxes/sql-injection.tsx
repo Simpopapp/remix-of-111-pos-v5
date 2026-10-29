@@ -6,13 +6,13 @@ import { BenchShell, type BenchRunContext } from "./bench-shell";
 const TOGGLES: BenchToggleSpec[] = [
   {
     key: "queryStyle",
-    label: "Query style",
+    label: "Estilo de consulta",
     options: [
-      { value: "concat", label: "String concatenation" },
-      { value: "parameterized", label: "Parameterized" },
+      { value: "concat", label: "Concatenação de strings" },
+      { value: "parameterized", label: "Parametrizada" },
     ],
     default: "concat",
-    hint: "the same input, two different fates",
+    hint: "a mesma entrada, dois destinos diferentes",
   },
 ];
 
@@ -27,8 +27,8 @@ export function SqlInjectionSandbox() {
     setInputView(input);
     if (input.trim().length === 0) {
       return {
-        headline: "No input entered — nothing to evaluate",
-        detail: ["Type a username (try the demo users or a payload)."],
+        headline: "Nenhuma entrada digitada — nada para avaliar",
+        detail: ["Digite um usuário (experimente os usuários de demo ou um payload)."],
       };
     }
     const mode = (ctx.toggles["queryStyle"] ?? "concat") as "concat" | "parameterized";
@@ -36,13 +36,13 @@ export function SqlInjectionSandbox() {
     setResult(r);
     const observation: RunObservation = {
       headline: r.supported
-        ? `${r.mode}: ${r.rows.length} row${r.rows.length === 1 ? "" : "s"} returned`
-        : "Out of model: this input is not covered by the simulator",
+        ? `${r.mode}: ${r.rows.length} linha(s) retornada(s)`
+        : "Fora do modelo: esta entrada não é coberta pelo simulador",
       detail: [
         `Query: ${r.sql}`,
         r.mode === "parameterized"
-          ? "Parameters are bound by the driver — the input never becomes SQL text."
-          : `Tokens in the input: code = [${r.tokens.code.join(", ") || "—"}], data = [${r.tokens.data.join(", ") || "—"}]`,
+          ? "Os parâmetros são vinculados pelo driver — a entrada nunca vira texto SQL."
+          : `Tokens da entrada: código = [${r.tokens.code.join(", ") || "—"}], dado = [${r.tokens.data.join(", ") || "—"}]`,
       ],
     };
     if (!r.supported) observation.outOfModel = r.verdict;
@@ -60,13 +60,13 @@ export function SqlInjectionSandbox() {
       id="sqli"
       specs={[]}
       toggleSpecs={TOGGLES}
-      actions={[{ key: "login", label: "Attempt login", variant: "primary" }]}
+      actions={[{ key: "login", label: "Tentar login", variant: "primary" }]}
       onRun={onRun}
       onReset={onReset}
       controlsExtra={
         <div>
           <label htmlFor="sqli-username" className="block text-xs font-semibold text-foreground">
-            Username input
+            Usuário
           </label>
           <input
             id="sqli-username"
@@ -81,7 +81,7 @@ export function SqlInjectionSandbox() {
             ))}
           </datalist>
           <p className="mt-0.5 text-[10px] text-muted-foreground">
-            Demo users: {SQL_DEMO_USERS.join(", ")} — or type your own string.
+            Usuários de demo: {SQL_DEMO_USERS.join(", ")} — ou digite a sua própria string.
           </p>
         </div>
       }
@@ -89,10 +89,10 @@ export function SqlInjectionSandbox() {
         result ? (
           <div className="space-y-3">
             <div className="rounded-lg border border-border bg-background/60 p-3">
-              <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Query sent</p>
+              <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Consulta enviada</p>
               <p className="break-all font-mono text-xs text-foreground">{result.sql}</p>
               <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                Input as tokens
+                Entrada como tokens
               </p>
               <p className="font-mono text-xs">
                 {result.tokens.code.map((t, i) => (
@@ -109,7 +109,7 @@ export function SqlInjectionSandbox() {
             </div>
             <div className="rounded-lg border border-border bg-background/60 p-3">
               <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                Result — {result.rows.length} row{result.rows.length === 1 ? "" : "s"}
+                Resultado — {result.rows.length} linha(s)
               </p>
               {result.rows.length > 0 ? (
                 <p className="font-mono text-xs text-success">{result.rows.join(", ")}</p>
@@ -121,7 +121,7 @@ export function SqlInjectionSandbox() {
           </div>
         ) : (
           <p className="text-center text-xs text-muted-foreground">
-            [Ready] Predict what happens to the query for a given input, then attempt the login. The query, the entry, the parameters and the result appear in the same field.
+            [Pronto] Preveja o que acontece com a consulta para uma dada entrada, e depois tente o login. A consulta, a entrada, os parâmetros e o resultado aparecem no mesmo campo.
           </p>
         )
       }

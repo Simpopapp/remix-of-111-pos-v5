@@ -76,11 +76,11 @@ export function validateParams(
   for (const spec of specs) {
     const v = values[spec.key];
     if (typeof v !== "number" || !Number.isFinite(v)) {
-      errors[spec.key] = `${spec.label}: value required`;
+      errors[spec.key] = `${spec.label}: informe um valor`;
       continue;
     }
     if (v < spec.min || v > spec.max) {
-      errors[spec.key] = `${spec.label}: ${v} is out of range (${spec.min}–${spec.max}${spec.unit ? " " + spec.unit : ""})`;
+      errors[spec.key] = `${spec.label}: ${v} está fora do intervalo (${spec.min}–${spec.max}${spec.unit ? " " + spec.unit : ""})`;
     }
   }
   return Object.keys(errors).length > 0 ? errors : null;
@@ -159,13 +159,13 @@ export function reportReadiness(input: {
   interpretation: string;
 }): ReportReadiness {
   if (input.attempts.length === 0) {
-    return { state: "blocked", reason: "No evidence yet: run the experiment first." };
+    return { state: "blocked", reason: "Ainda sem evidência: execute o experimento primeiro." };
   }
   if (input.hypothesis.trim().length === 0) {
-    return { state: "blocked", reason: "Prediction missing: write what you expect before running." };
+    return { state: "blocked", reason: "Previsão faltando: escreva o que você espera antes de executar." };
   }
   if (input.interpretation.trim().length === 0) {
-    return { state: "blocked", reason: "Interpretation missing: write what the evidence shows." };
+    return { state: "blocked", reason: "Interpretação faltando: escreva o que a evidência mostra." };
   }
   return { state: "ready" };
 }
@@ -186,93 +186,93 @@ export interface LabCatalogEntry {
 export const LAB_CATALOG: Record<SandboxId, LabCatalogEntry> = {
   ratelimit: {
     phenomenon:
-      "A limiter counts tokens, not requests: bursts inside capacity pass while a flow faster than the refill drains the bucket.",
+      "O limitador conta tokens, não requisições: rajadas dentro da capacidade passam, enquanto um fluxo mais rápido que o reabastecimento esvazia o balde.",
     controls: [
-      "Bucket capacity (1–10 tokens)",
-      "Refill interval (0.25–3 s)",
-      "Scope: per-client or shared global bucket",
-      "Actions: single request from each client, or a burst of 5",
+      "Capacidade do balde (1–10 tokens)",
+      "Intervalo de reabastecimento (0,25–3 s)",
+      "Escopo: por cliente ou balde global compartilhado",
+      "Ações: uma requisição de cada cliente, ou rajada de 5",
     ],
     competence:
-      "Point at the moment 429s start, separate an acceptable burst from a sustained flow, and compare per-IP against global scope with the same traffic.",
+      "Apontar o momento em que os 429 começam, separar uma rajada aceitável de um fluxo sustentado e comparar por-IP contra escopo global com o mesmo tráfego.",
     limits: [
-      "No adaptive or quota-based policies — only a token bucket",
-      "Distributed limiters (multiple nodes sharing state) are not modeled",
+      "Sem políticas adaptativas ou de cota — apenas token bucket",
+      "Limitadores distribuídos (vários nós compartilhando estado) não são modelados",
     ],
   },
   circuit: {
     phenomenon:
-      "A breaker opens after repeated failures so callers fail fast instead of waiting for a dead dependency.",
+      "O disjuntor abre após falhas repetidas para o chamador falhar rápido em vez de esperar por uma dependência morta.",
     controls: [
-      "Failure threshold (1–5 consecutive failures)",
-      "Cooldown before probing (1–10 s)",
-      "Protection on/off on the same call sequence",
-      "Actions: call the API, inject an outage, restore it",
+      "Limite de falhas (1–5 falhas consecutivas)",
+      "Tempo de espera antes de sondar (1–10 s)",
+      "Proteção ligada/desligada na mesma sequência de chamadas",
+      "Ações: chamar a API, injetar queda, restaurar",
     ],
     competence:
-      "Follow each state transition with its trigger, and compare the same call sequence with and without protection.",
+      "Acompanhar cada transição de estado com o gatilho dela, e comparar a mesma sequência de chamadas com e sem proteção.",
     limits: [
-      "Single caller and single dependency — no bulkheads or fallback trees",
-      "Half-open probes are one at a time; concurrency is not modeled",
+      "Um chamador e uma dependência — sem bulkheads nem árvores de fallback",
+      "Sondas half-open são uma por vez; concorrência não é modelada",
     ],
   },
   nplusone: {
     phenomenon:
-      "One query per item multiplies round-trips; batching or joining collapses them for the same entities.",
+      "Uma consulta por item multiplica as idas e vindas; agrupar em lote ou usar JOIN as reduz para as mesmas entidades.",
     controls: [
-      "Items in the dataset (5–50)",
-      "Network round-trip cost (5–100 ms)",
-      "Strategy: per-item, batch, or JOIN",
+      "Itens no conjunto de dados (5–50)",
+      "Custo de ida e volta na rede (5–100 ms)",
+      "Estratégia: por item, em lote, ou JOIN",
     ],
     competence:
-      "Count queries, rows and total cost for the same identifiable entities before and after changing strategy.",
+      "Contar consultas, linhas e custo total para as mesmas entidades identificáveis antes e depois de mudar a estratégia.",
     limits: [
-      "No caching, no DataLoader-style coalescing, no read replicas",
-      "Cost is a didactic model, not a benchmark",
+      "Sem cache, sem coalescência estilo DataLoader, sem réplicas de leitura",
+      "O custo é um modelo didático, não um benchmark",
     ],
   },
   sqli: {
     phenomenon:
-      "String concatenation lets input become code; a parameterized query keeps data as data.",
+      "A concatenação de strings deixa a entrada virar código; uma consulta parametrizada mantém dado como dado.",
     controls: [
-      "Username input (try the demo users or your own string)",
-      "Query style: concatenated vs parameterized",
+      "Campo de usuário (experimente os usuários de demo ou a sua própria string)",
+      "Estilo de consulta: concatenada vs parametrizada",
     ],
     competence:
-      "Read the query, the entry, the parameters and the result in the same field, and say why the attack short-circuits.",
+      "Ler a consulta, a entrada, os parâmetros e o resultado no mesmo campo, e dizer por que o ataque curto-circuitou.",
     limits: [
-      "Only classic injection in one query — no second-order injection, no XSS, no WAF layer",
-      "The users table is a didactic fixture, not a real database",
+      "Apenas injeção clássica em uma consulta — sem injeção de segunda ordem, sem XSS, sem camada de WAF",
+      "A tabela de usuários é um cenário didático, não um banco de dados real",
     ],
   },
   pubsub: {
     phenomenon:
-      "Competing consumers and fan-out are different structures: the delivery shape decides who receives each event and what a failure does.",
+      "Consumidores concorrentes e fan-out são estruturas diferentes: o formato de entrega decide quem recebe cada evento e o que uma falha causa.",
     controls: [
-      "Mode: competing consumers vs fan-out",
-      "Workers/subscribers (1–5)",
-      "Failure kind: none, transient, poison, slow consumer",
-      "Actions: publish events, step the queue, pause/resume",
+      "Modo: consumidores concorrentes vs fan-out",
+      "Workers/assinantes (1–5)",
+      "Tipo de falha: nenhuma, transitória, venenosa, consumidor lento",
+      "Ações: publicar eventos, avançar a fila, pausar/retomar",
     ],
     competence:
-      "Trace one event from publish to ack or dead-letter, and read the DLQ as the consequence of a retry policy.",
+      "Rastrear um evento do publish até o ack ou a dead-letter, e ler a DLQ como consequência da política de re tentativa.",
     limits: [
-      "At-least-once delivery only; exactly-once and ordering guarantees are out of scope",
-      "Fan-out failures are per-subscriber; shared subscription semantics differ",
+      "Entrega at-least-once apenas; exactly-once e garantias de ordenação ficam fora do escopo",
+      "Falhas em fan-out são por assinante; semânticas de assinatura compartilhada são diferentes",
     ],
   },
   tail: {
     phenomenon:
-      "Percentiles expose the slow tail that averages hide: most requests are fast and the slow ones still hurt real users.",
+      "Os percentis expõem a cauda lenta que as médias escondem: a maioria das requisições é rápida e as lentas ainda prejudicam usuários reais.",
     controls: [
-      "Sample size (100–1000 requests)",
-      "Seed (deterministic sample)",
+      "Tamanho da amostra (100–1000 requisições)",
+      "Seed (amostra determinística)",
     ],
     competence:
-      "Read the histogram with units and sample size, locate the p99 marker, and explain why one outlier shifts p99 far more than p50.",
+      "Ler o histograma com unidades e tamanho de amostra, localizar o marcador de p99 e explicar por que um outlier desloca o p99 muito mais que o p50.",
     limits: [
-      "Latencies come from a didactic model, never from a real benchmark",
-      "No percentiles beyond p99.9, no per-endpoint breakdown",
+      "As latências vêm de um modelo didático, nunca de um benchmark real",
+      "Sem percentis além do p99.9, sem detalhamento por endpoint",
     ],
   },
 };

@@ -14,7 +14,7 @@ export function PracticeLesson({ lesson, conceptId }: { lesson: Lesson; conceptI
     <div>
       <section className="mb-8 rounded-2xl border border-primary/30 bg-primary/5 p-5">
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Lesson {lesson.rev} · prática
+          Aula {lesson.rev} · prática
         </p>
         <h2 className="mb-2 flex items-center gap-2 font-serif text-xl font-bold text-foreground">
           <ListChecks className="size-5 text-primary" /> Decida e verifique

@@ -16,17 +16,17 @@ export const Route = createFileRoute("/sandboxes")({
   },
   head: () => ({
     meta: [
-      { title: "Labs — VibeCoder Academy" },
+      { title: "Laboratórios — VibeCoder Academy" },
       {
         name: "description",
         content:
-          "Six focused labs: rate limiting, circuit breaking, N+1 queries, SQL injection, queues and tail latency. Each card states the phenomenon, the real controls, the competence it builds and its limits.",
+          "Seis laboratórios focados: rate limiting, circuit breaking, consultas N+1, SQL injection, filas e latência de cauda. Cada card declara o fenômeno, os controles reais, a competência que constrói e os limites.",
       },
-      { property: "og:title", content: "Labs — VibeCoder Academy" },
+      { property: "og:title", content: "Laboratórios — VibeCoder Academy" },
       {
         property: "og:description",
         content:
-          "Six focused labs with an explicit workbench: predict, run, observe and report. Phenomenon, controls, competence and limits stated up front.",
+          "Seis laboratórios focados com uma bancada explícita: prever, executar, observar e relatar. Fenômeno, controles, competência e limites declarados de antemão.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -76,7 +76,7 @@ function SandboxesPage() {
 
               {/* Controles reais */}
               <div className="mt-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Controls on the bench</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Controles na bancada</p>
                 <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
                   {catalog.controls.slice(0, 3).map((c, i) => (
                     <li key={i}>· {c}</li>
@@ -86,13 +86,13 @@ function SandboxesPage() {
 
               {/* Competência */}
               <div className="mt-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Competence</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Competência</p>
                 <p className="mt-0.5 text-xs text-foreground/90">{catalog.competence}</p>
               </div>
 
               {/* Limites honestos */}
               <div className="mt-3">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">What it does NOT show</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">O que NÃO demonstra</p>
                 <ul className="mt-0.5 space-y-0.5 text-xs text-muted-foreground">
                   {catalog.limits.map((l, i) => (
                     <li key={i}>· {l}</li>

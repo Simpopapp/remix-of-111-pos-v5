@@ -39,19 +39,19 @@ export const DIMENSION_LABELS: Record<Dimension, string> = {
 
 /** O que a dimensão significa — e o que ela NÃO significa (planejamento §14.1). */
 export const DIMENSION_MEANING: Record<Dimension, string> = {
-  contact: "You opened this lesson. Says nothing about understanding.",
-  practiced: "You attempted at least one task, with whatever help you used.",
-  demonstrated: "You met every criterion of a task without decisive help.",
-  transferred: "You solved a variant task — different names, same principle.",
-  retained: "You recovered a variant after the scheduled interval.",
-  applied: "You registered use in your own app. Self-declaration, never proof.",
+  contact: "Você abriu esta aula. Não diz nada sobre compreensão.",
+  practiced: "Você tentou ao menos uma tarefa, com a ajuda que precisou.",
+  demonstrated: "Você atendeu a todos os critérios de uma tarefa sem ajuda decisiva.",
+  transferred: "Você resolveu uma tarefa variante — nomes diferentes, mesmo princípio.",
+  retained: "Você recuperou uma variante após o intervalo programado.",
+  applied: "Você registrou uso no seu app. Autodeclaração, nunca prova.",
 };
 
 /** Contagem por dimensão com denominador rotulado (PRD D9). */
 export interface DimensionStat {
   count: number;
   denominator: number;
-  /** Denominador explícito e honesto, ex.: "3 of 111 concepts have deep lessons". */
+  /** Denominador explícito e honesto, ex.: "3 de 111 conceitos têm aulas profundas". */
   denominatorLabel: string;
 }
 
@@ -120,10 +120,10 @@ function denominatorLabel(dim: Dimension, scopeNoun: string, denominator: number
       return `${denominator} ${scopeNoun}`;
     case "practiced":
     case "demonstrated":
-      return `${denominator} ${scopeNoun} have practice tasks`;
+      return `${denominator} ${scopeNoun} têm tarefas de prática`;
     case "transferred":
     case "retained":
-      return `${denominator} ${scopeNoun} have transfer variants`;
+      return `${denominator} ${scopeNoun} têm variantes de transferência`;
   }
 }
 
@@ -203,7 +203,7 @@ export function progressOverview(state: LearningState): ProgressOverview {
     totals[d] = stat(
       counts[d],
       denominators[d],
-      denominatorLabel(d, "concepts", denominators[d]),
+      denominatorLabel(d, "conceitos", denominators[d]),
     );
   }
 
@@ -236,7 +236,7 @@ export function progressOverview(state: LearningState): ProgressOverview {
         dims[d] = stat(
           catCounts[d],
           catDenominators[d],
-          denominatorLabel(d, "concepts", catDenominators[d]),
+          denominatorLabel(d, "conceitos", catDenominators[d]),
         );
       }
       return { cat, concepts: ids.length, dims };

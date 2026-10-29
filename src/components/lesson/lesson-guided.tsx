@@ -46,10 +46,10 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
     <div>
       <section className="mb-8 rounded-2xl border border-primary/30 bg-primary/5 p-5">
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Lesson {lesson.rev} · anchor lesson
+          Aula {lesson.rev} · aula âncora
         </p>
         <h2 className="mb-2 flex items-center gap-2 font-serif text-xl font-bold text-foreground">
-          <Target className="size-5 text-primary" /> Objective
+          <Target className="size-5 text-primary" /> Objetivo
         </h2>
         <p className="text-sm leading-relaxed text-foreground/90">{lesson.objective}</p>
       </section>
@@ -59,19 +59,19 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
       <Section icon={ScrollText} title="Situação">
         <dl className="space-y-2 text-sm">
           <div>
-            <dt className="font-semibold text-foreground">System</dt>
+            <dt className="font-semibold text-foreground">Sistema</dt>
             <dd className="text-muted-foreground">{lesson.scenario.system}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Data</dt>
+            <dt className="font-semibold text-foreground">Dado</dt>
             <dd className="text-muted-foreground">{lesson.scenario.data}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Symptom</dt>
+            <dt className="font-semibold text-foreground">Sintoma</dt>
             <dd className="text-muted-foreground">{lesson.scenario.symptom}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Constraints</dt>
+            <dt className="font-semibold text-foreground">Restrições</dt>
             <dd className="text-muted-foreground">
               <ul className="list-inside list-disc">
                 {lesson.scenario.constraints.map((c, i) => (
@@ -81,7 +81,7 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
             </dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Baseline</dt>
+            <dt className="font-semibold text-foreground">Linha de base</dt>
             <dd className="text-muted-foreground">{lesson.scenario.baseline}</dd>
           </div>
         </dl>
@@ -91,7 +91,7 @@ export function GuidedLesson({ lesson }: { lesson: Lesson }) {
 
       {revealed ? (
         <>
-          <Section icon={Brain} title="Mental model">
+          <Section icon={Brain} title="Seu modelo mental">
             <p className="mb-3 text-sm leading-relaxed text-foreground/90">
               {lesson.mentalModel.definition}
             </p>

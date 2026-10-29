@@ -27,9 +27,9 @@ export const Route = createFileRoute("/missions/$slug")({
   head: ({ params }) => {
     const mission = getMission(params.slug);
     const title = mission
-      ? `${mission.title} — Missions — VibeCoder Academy`
-      : "Mission — VibeCoder Academy";
-    const description = mission ? mission.problem : "An integrated learning mission.";
+      ? `${mission.title} — Missões — VibeCoder Academy`
+      : "Missão — VibeCoder Academy";
+    const description = mission ? mission.problem : "Missão integrada de aprendizagem.";
     return {
       meta: [
         { title },
@@ -51,15 +51,15 @@ export const Route = createFileRoute("/missions/$slug")({
 function historyLabel(entry: MissionHistoryEntry): string {
   switch (entry.status) {
     case "collected":
-      return "Reflection — collected, not graded";
+      return "Reflexão — coletada, sem nota";
     case "lab":
-      return `Evidence from the ${entry.labId} lab`;
+      return `Evidência do laboratório ${entry.labId}`;
     case "met":
-      return "Criterion demonstrated";
+      return "Critério demonstrado";
     case "partial":
-      return "Partially demonstrated";
+      return "Parcialmente demonstrado";
     case "missed":
-      return "Criterion not met";
+      return "Critério não atendido";
   }
 }
 
@@ -511,7 +511,7 @@ function MissionPage() {
                 value={evidence}
                 onChange={(e) => setEvidence(e.target.value)}
                 rows={3}
-                placeholder={step.needsEvidence ?? "What did you observe or decide?"}
+                placeholder={step.needsEvidence ?? "O que você observou ou decidiu?"}
                 className="mt-1.5 w-full rounded-lg border border-ink-muted/40 bg-white/70 p-3 text-sm text-ink placeholder:text-ink-muted/70 focus:border-primary focus:outline-none"
               />
               <p className="mt-1 text-xs text-ink-muted">
@@ -535,7 +535,7 @@ function MissionPage() {
               value={dossier}
               onChange={(e) => setDossier(e.target.value)}
               rows={8}
-              placeholder="Derived from your reasoning below — edit freely."
+              placeholder="Derivado do seu raciocínio abaixo — edite à vontade."
               className="mt-1.5 w-full rounded-lg border border-ink-muted/40 bg-white/70 p-3 text-sm text-ink placeholder:text-ink-muted/70 focus:border-primary focus:outline-none"
             />
             <p className="mt-1 text-xs text-ink-muted">

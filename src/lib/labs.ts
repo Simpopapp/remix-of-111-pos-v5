@@ -43,192 +43,192 @@ export const LABS: Record<SandboxId, LabBench> = {
     id: "ratelimit",
     title: "Rate Limiting",
     scenario: {
-      system: "Public API behind an edge gateway, one limiter instance per IP.",
-      data: "Token bucket: capacity 5, refill 1 token every 1.5 s, scoped per IP.",
-      symptom: "A burst of clicks is fine; a sustained loop of retries gets 429s.",
-      baseline: "With tokens available, every request is accepted and forwarded.",
+      system: "API pública atrás de um gateway de borda, uma instância do limitador por IP.",
+      data: "Token bucket: capacidade 5, reabastece 1 token a cada 1,5 s, escopo por IP.",
+      symptom: "Uma rajada de cliques passa; um loop sustentado de retentativas leva a 429.",
+      baseline: "Com tokens disponíveis, toda requisição é aceita e encaminhada.",
     },
     instrument: {
       kind: "request-flow",
       caption:
-        "Observe where each request went: consumed a token and reached the service, or was rejected at the edge with a 429.",
+        "Observe para onde cada requisição foi: consumiu um token e chegou ao serviço, ou foi rejeitada na borda com um 429.",
       data: {
         nodes: [
-          { id: "client", label: "Client", kind: "client" },
-          { id: "edge", label: "Rate limiter (edge)", kind: "edge" },
-          { id: "service", label: "API service", kind: "service" },
-          { id: "store", label: "Database", kind: "store" },
+          { id: "client", label: "Cliente", kind: "client" },
+          { id: "edge", label: "Rate limiter (borda)", kind: "edge" },
+          { id: "service", label: "Serviço da API", kind: "service" },
+          { id: "store", label: "Banco de dados", kind: "store" },
         ],
         edges: [
           { from: "client", to: "edge", label: "GET /api/v1/data" },
-          { from: "edge", to: "service", label: "forward — 1 token consumed" },
+          { from: "edge", to: "service", label: "encaminha — 1 token consumido" },
           { from: "edge", to: "client", label: "429 Too Many Requests" },
         ],
         window: [
-          { ts: "12:00:00.000", accepted: 1, rejected: 0, destination: "service" },
+          { ts: "12:00:00.000", accepted: 1, rejected: 0, destination: "serviço" },
           { ts: "12:00:00.120", accepted: 1, rejected: 0, destination: "service" },
-          { ts: "12:00:00.260", accepted: 1, rejected: 1, destination: "client" },
+          { ts: "12:00:00.260", accepted: 1, rejected: 1, destination: "cliente" },
           { ts: "12:00:00.400", accepted: 0, rejected: 2, destination: "client" },
         ],
         limits: [{ kind: "token-bucket", capacity: 5, refillMs: 1500, scope: "ip" }],
       },
       textEquivalent:
-        "4 requests in 400 ms: 3 accepted and forwarded to the service, 2 rejected with 429 at the edge. Limit: token bucket, capacity 5, refill 1/1.5 s, scoped per IP.",
+        "4 requisições em 400 ms: 3 aceitas e encaminhadas ao serviço, 2 rejeitadas com 429 na borda. Limite: token bucket, capacidade 5, reabastecimento 1/1,5 s, escopo por IP.",
     },
     evidence: [
-      "Point at the moment the 429s start and name what ran out (tokens, not requests).",
-      "Distinguish an acceptable burst (tokens cover it) from a sustained flow the bucket cannot refill for.",
+      "Aponte o momento em que os 429 começam e nomeie o que se esgotou (tokens, não requisições).",
+      "Separe uma rajada aceitável (os tokens cobrem) de um fluxo sustentado que o balde não consegue reabastecer.",
     ],
     interpretation:
-      "The limiter does not count requests — it counts tokens. A burst within capacity passes; a flow faster than the refill rate drains the bucket and gets 429s. The scope decides who is being limited: per-IP here means one noisy client does not starve the others.",
+      "O limitador não conta requisições — conta tokens. Uma rajada dentro da capacidade passa; um fluxo mais rápido que o reabastecimento esvazia o balde e leva 429. O escopo decide quem está sendo limitado: por-IP significa aqui que um cliente barulhento não mata os outros.",
     challenge:
-      "The same traffic rate moved to a global (shared) limit: who gets throttled now, and why does that change who is hurt?",
+      "A mesma taxa de tráfego movida para um limite global (compartilhado): quem é limitado agora, e por que isso muda quem é prejudicado?",
   },
   circuit: {
     id: "circuit",
     title: "Circuit Breaker",
     scenario: {
-      system: "Checkout service calling a slow downstream payment provider.",
-      data: "Breaker: opens after 3 consecutive failures, 5 s cooldown, 1 half-open probe.",
-      symptom: "Every call waits for the full timeout while the provider is down.",
-      baseline: "In CLOSED the breaker is invisible; requests flow normally.",
+      system: "Serviço de checkout chamando um provedor de pagamento lento e indisponível.",
+      data: "Disjuntor: abre após 3 falhas consecutivas, cooldown de 5 s, 1 sonda half-open.",
+      symptom: "Toda chamada espera o timeout completo enquanto o provedor está fora.",
+      baseline: "Em CLOSED o disjuntor é invisível; as requisições fluem normalmente.",
     },
     instrument: {
       kind: "state-machine",
       caption:
-        "Follow the states and name the trigger of each transition — nothing changes state without an explicit cause.",
+        "Acompanhe os estados e nomeie o gatilho de cada transição — nada muda de estado sem uma causa explícita.",
       data: {
         states: [
-          { id: "closed", label: "CLOSED — normal calls", tone: "ok" },
-          { id: "open", label: "OPEN — failing fast", tone: "down" },
-          { id: "half-open", label: "HALF-OPEN — probing", tone: "warn" },
+          { id: "closed", label: "CLOSED — chamadas normais", tone: "ok" },
+          { id: "open", label: "OPEN — falhando rápido", tone: "down" },
+          { id: "half-open", label: "HALF-OPEN — sondando", tone: "warn" },
         ],
         transitions: [
-          { from: "closed", to: "open", trigger: "3 consecutive failures" },
-          { from: "open", to: "half-open", trigger: "cooldown elapsed (5 s)" },
-          { from: "half-open", to: "closed", trigger: "probe succeeds" },
-          { from: "half-open", to: "open", trigger: "probe fails" },
+          { from: "closed", to: "open", trigger: "3 falhas consecutivas" },
+          { from: "open", to: "half-open", trigger: "cooldown esgotado (5 s)" },
+          { from: "half-open", to: "closed", trigger: "sonda funciona" },
+          { from: "half-open", to: "open", trigger: "sonda falha" },
         ],
         now: "closed",
         history: [
-          { ts: 0, event: "call succeeded", from: "closed" },
-          { ts: 1, event: "failure 1/3", from: "closed" },
-          { ts: 2, event: "failure 2/3", from: "closed" },
-          { ts: 3, event: "failure 3/3 → OPEN", from: "closed", to: "open" },
+          { ts: 0, event: "chamada OK", from: "closed" },
+          { ts: 1, event: "falha 1/3", from: "closed" },
+          { ts: 2, event: "falha 2/3", from: "closed" },
+          { ts: 3, event: "falha 3/3 → OPEN", from: "closed", to: "open" },
         ],
         budget: { label: "cooldown", ms: 5000 },
       },
       textEquivalent:
-        "States: CLOSED (normal), OPEN (failing fast), HALF-OPEN (probing). Transitions: 3 consecutive failures → OPEN; cooldown 5 s elapsed → HALF-OPEN; probe succeeds → CLOSED; probe fails → OPEN again.",
+        "Estados: CLOSED (normal), OPEN (falhando rápido), HALF-OPEN (sondando). Transições: 3 falhas consecutivas → OPEN; cooldown de 5 s esgotado → HALF-OPEN; sonda funciona → CLOSED; sonda falha → OPEN de novo.",
     },
     evidence: [
-      "Name the trigger of every transition on the bench (3 failures, cooldown, probe result).",
-      "Explain what the caller experiences in OPEN versus CLOSED.",
+      "Nomeie o gatilho de cada transição na bancada (3 falhas, cooldown, resultado da sonda).",
+      "Explique o que o chamador sente em OPEN versus CLOSED.",
     ],
     interpretation:
-      "The breaker trades waiting for a fast, known failure. In OPEN the caller gets an immediate error instead of a 10 s timeout — that protects the caller's threads and gives the downstream time to recover. HALF-OPEN is the controlled experiment: exactly one probe decides whether to close again.",
+      "O disjuntor troca a espera por uma falha rápida e conhecida. Em OPEN o chamador recebe um erro imediato em vez de um timeout de 10 s — isso protege as threads do chamador e dá tempo ao serviço de baixo para se recuperar. HALF-OPEN é o experimento controlado: exatamente uma sonda decide se volta a fechar.",
     challenge:
-      "Why does one successful probe close the breaker instead of, say, five? What does that choice assume about the downstream?",
+      "Por que uma única sonda bem-sucedida fecha o disjuntor em vez de, digamos, cinco? O que essa escolha assume sobre o serviço de baixo?",
   },
   nplusone: {
     id: "nplusone",
     title: "N+1 Visualizer",
     scenario: {
-      system: "User list page that loads addresses one item at a time.",
-      data: "Users configurable (10/25/50), cardinality 1/2/5 addresses per user, cost per round-trip configurable.",
-      symptom: "Page feels slower as the list grows — latency scales with rows, not pages.",
-      baseline: "One JOIN: 1 round-trip regardless of list size.",
+      system: "Página de lista de usuários que carrega endereços um item por vez.",
+      data: "Usuários configuráveis (10/25/50), cardinalidade 1/2/5 endereços por usuário, custo por ida e volta configurável.",
+      symptom: "A página fica mais lenta conforme a lista cresce — a latência escala com as linhas, não com as páginas.",
+      baseline: "Um JOIN: 1 ida e volta, independentemente do tamanho da lista.",
     },
     instrument: {
       kind: "request-flow",
       caption:
-        "Count the round-trips to the store under each strategy. Same data, different query shape.",
+        "Conte as idas e voltas ao banco em cada estratégia. Os mesmos dados, formas de consulta diferentes.",
       data: {
         nodes: [
-          { id: "client", label: "Browser", kind: "client" },
-          { id: "app", label: "App server", kind: "service" },
-          { id: "db", label: "Database", kind: "store" },
+          { id: "client", label: "Navegador", kind: "client" },
+          { id: "app", label: "Servidor da aplicação", kind: "service" },
+          { id: "db", label: "Banco de dados", kind: "store" },
         ],
         edges: [
           { from: "client", to: "app", label: "GET /users" },
-          { from: "app", to: "db", label: "1 query per item (N+1)" },
-          { from: "app", to: "db", label: "or 1 JOIN for everything" },
+          { from: "app", to: "db", label: "1 consulta por item (N+1)" },
+          { from: "app", to: "db", label: "ou 1 JOIN para tudo" },
         ],
         window: [
-          { ts: "12:00:01.000", accepted: 1, rejected: 0, destination: "db — users" },
-          { ts: "12:00:01.010", accepted: 25, rejected: 0, destination: "db — one per user" },
+          { ts: "12:00:01.000", accepted: 1, rejected: 0, destination: "banco — usuários" },
+          { ts: "12:00:01.010", accepted: 25, rejected: 0, destination: "banco — um por usuário" },
         ],
       },
       textEquivalent:
-        "Per-item: 1 + N queries to the database. Batch: queries grouped by IN (...). JOIN: a single query returns users with their addresses. Latency follows round-trips × cost, labeled as a teaching model.",
+        "Por item: 1 + N consultas ao banco. Lote: consultas agrupadas por IN (...). JOIN: uma única consulta devolve usuários com seus endereços. A latência segue idas e voltas × custo, rotulada como modelo didático.",
     },
     evidence: [
-      "Show that per-item runs users+1 queries for every cardinality.",
-      "Show that batch and JOIN cut the count without touching the data.",
+      "Mostre que por item executa usuários+1 consultas para toda cardinalidade.",
+      "Mostre que lote e JOIN cortam a contagem sem tocar nos dados.",
     ],
     interpretation:
-      "The dominant cost is round-trips, not rows — that is why fewer queries wins. But 'fewer queries' is not automatically 'faster': a JOIN on a page the UI discards, or a batch IN () list so large it defeats indexes, can be worse. Separate the two claims.",
+      "O custo dominante são as idas e voltas, não as linhas — por isso menos consultas vence. Mas 'menos consultas' não é automaticamente 'mais rápido': um JOIN numa página que a UI descarta, ou uma lista IN () tão grande que vence os índices, pode ser pior. Separe as duas afirmações.",
     challenge:
-      "With cardinality 5 and 50 users, which strategy wins if each round-trip costs 2 ms instead of 12 ms? When does the answer flip?",
+      "Com cardinalidade 5 e 50 usuários, qual estratégia vence se cada ida e volta custar 2 ms em vez de 12 ms? Quando a resposta inverte?",
   },
   sqli: {
     id: "sqli",
     title: "SQL Injection",
     scenario: {
-      system: "Login form that builds SQL from raw user input.",
-      data: "Fixed demo table: alice, O'Brien, bob, carol — password check inline.",
-      symptom: "A crafted username returns every user without the password.",
-      baseline: "Parameterized mode treats the input as one opaque value.",
+      system: "Formulário de login que monta SQL a partir da entrada bruta do usuário.",
+      data: "Tabela de demo fixa: alice, O'Brien, bob, carol — verificação de senha inline.",
+      symptom: "Um usuário especialmente construído devolve todos os usuários, sem a senha.",
+      baseline: "O modo parametrizado trata a entrada como um valor opaco único.",
     },
     instrument: {
       kind: "request-flow",
       caption:
-        "Watch the input change role: data in parameterized mode, code in concatenation mode.",
+        "Observe a entrada mudar de papel: dado no modo parametrizado, código no modo concatenação.",
       data: {
         nodes: [
-          { id: "client", label: "Login form", kind: "client" },
+          { id: "client", label: "Formulário de login", kind: "client" },
           { id: "app", label: "App server", kind: "service" },
           { id: "db", label: "Database", kind: "store" },
         ],
         edges: [
-          { from: "client", to: "app", label: "username field" },
-          { from: "app", to: "db", label: "concatenated SQL (code)" },
-          { from: "app", to: "db", label: "bound parameter (data)" },
+          { from: "client", to: "app", label: "campo de usuário" },
+          { from: "app", to: "db", label: "SQL concatenado (código)" },
+          { from: "app", to: "db", label: "parâmetro vinculado (dado)" },
         ],
         window: [
-          { ts: "12:00:01.000", accepted: 1, rejected: 0, destination: "db — literal search" },
-          { ts: "12:00:01.050", accepted: 1, rejected: 0, destination: "db — bypass" },
+          { ts: "12:00:01.000", accepted: 1, rejected: 0, destination: "banco — busca literal" },
+          { ts: "12:00:01.050", accepted: 1, rejected: 0, destination: "banco — bypass" },
         ],
       },
       textEquivalent:
-        "Two paths to the database: concatenation puts user text inside the SQL text (code) and lets quotes rewrite the clause; parameterization ships the same text as a value (data). Inputs outside the model get 'outside the model', not a fake verdict.",
+        "Dois caminhos até o banco: a concatenação põe o texto do usuário dentro do texto SQL (código) e deixa as aspas reescreverem a cláusula; a parametrização envia o mesmo texto como valor (dado). Entradas fora do modelo recebem 'fora do modelo', não um veredito falso.",
     },
     evidence: [
-      "Explain the precedence reading of user='x' OR '1'='1' AND pass='secret' (AND binds first).",
-      "Show that parameterized mode can still return rows — when the value is literally correct.",
+      "Explique a leitura de precedência de user='x' OR '1'='1' AND pass='secret' (o AND tem precedência).",
+      "Mostre que o modo parametrizado ainda pode devolver linhas — quando o valor está literalmente correto.",
     ],
     interpretation:
-      "Injection is a quoting bug: the boundary between code and data disappears. Parameterized queries restore it — the value is transmitted as data, never parsed as SQL. Note the honest semantics: a correct parameterized query CAN log you in (that is its job); it just cannot be tricked into changing the query.",
+      "Injeção é um bug de aspas: a fronteira entre código e dado desaparece. Consultas parametrizadas a restauram — o valor é transmitido como dado, nunca interpretado como SQL. Note a semântica honesta: uma consulta parametrizada correta PODE logar você (é o trabalho dela); ela apenas não pode ser enganada para mudar a consulta.",
     challenge:
-      "Why is the '--' comment variant the reliable bypass while the bare OR payload depends on how the rest of the clause was written?",
+      "Por que a variante com comentário '--' é o bypass confiável, enquanto o payload OR solto depende de como o resto da cláusula foi escrito?",
   },
   pubsub: {
     id: "pubsub",
     title: "Pub/Sub + Queue",
     scenario: {
-      system: "Order events published to a queue consumed by N workers (or fanned out to subscribers).",
-      data: "Competing consumers share one queue; fan-out gives every subscriber its own delivery. Failure kinds: transient, poison, slow.",
-      symptom: "Confusing 'one worker got it' with 'everyone got it' — and blaming the message for a flaky worker.",
-      baseline: "Healthy workers ack every delivery; DLQ only after retries exhaust.",
+      system: "Eventos de pedidos publicados numa fila consumida por N workers (ou distribuídos por fan-out a assinantes).",
+      data: "Consumidores concorrentes dividem uma fila; fan-out dá a cada assinante a sua própria entrega. Tipos de falha: transitória, venenosa, lenta.",
+      symptom: "Confundir 'um worker pegou' com 'todo mundo pegou' — e culpar a mensagem por um worker instável.",
+      baseline: "Workers saudáveis confirmam cada entrega; DLQ só depois de esgotar as retentativas.",
     },
     instrument: {
       kind: "request-flow",
       caption:
-        "In competing mode one worker wins each event; in fan-out every subscriber gets its own copy and its own failure.",
+        "No modo concorrente um worker leva cada evento; no fan-out cada assinante recebe a sua própria cópia e a sua própria falha.",
       data: {
         nodes: [
           { id: "pub", label: "Publisher", kind: "service" },
-          { id: "queue", label: "Queue / exchange", kind: "edge" },
+          { id: "queue", label: "Fila / exchange", kind: "edge" },
           { id: "w0", label: "Worker A", kind: "service" },
           { id: "w1", label: "Worker B", kind: "service" },
           { id: "w2", label: "Worker C", kind: "service" },
@@ -236,40 +236,40 @@ export const LABS: Record<SandboxId, LabBench> = {
         ],
         edges: [
           { from: "pub", to: "queue", label: "publish" },
-          { from: "queue", to: "w0", label: "competing: one wins" },
-          { from: "queue", to: "w1", label: "fan-out: every subscriber" },
-          { from: "w0", to: "dlq", label: "3 failed attempts" },
+          { from: "queue", to: "w0", label: "concorrentes: um leva" },
+          { from: "queue", to: "w1", label: "fan-out: cada assinante" },
+          { from: "w0", to: "dlq", label: "3 tentativas falhadas" },
         ],
         window: [
           { ts: "12:00:01.000", accepted: 1, rejected: 0, destination: "worker A" },
-          { ts: "12:00:01.200", accepted: 0, rejected: 1, destination: "DLQ — poison" },
+          { ts: "12:00:01.200", accepted: 0, rejected: 1, destination: "DLQ — venenosa" },
         ],
       },
       textEquivalent:
-        "Competing consumers: N workers share one queue, each event is processed once. Fan-out: every subscriber receives every event, failures are per subscriber. Failure causes: transient (retry helps), poison (retry does not help → DLQ), slow consumer (queue accumulates, no DLQ).",
+        "Consumidores concorrentes: N workers dividem uma fila, cada evento é processado uma vez. Fan-out: cada assinante recebe todos os eventos, falhas são por assinante. Causas de falha: transitória (retry ajuda), venenosa (retry não ajuda → DLQ), consumidor lento (a fila acumula, sem DLQ).",
     },
     evidence: [
-      "Switch modes and state who receives each event (one worker vs every subscriber).",
-      "Classify a failure: transient, poison, or slow — and what retry does in each.",
+      "Troque o modo e diga quem recebe cada evento (um worker vs cada assinante).",
+      "Classifique uma falha: transitória, venenosa ou lenta — e o que o retry faz em cada uma.",
     ],
     interpretation:
-      "The delivery model decides semantics: competing consumers give work distribution, fan-out gives independent copies. 'Poison' is a property of the message, never of a flaky worker — a random failure that succeeds on retry was transient, and retrying it is correct. A slow consumer accumulates backlog; that is backpressure, not dead letters.",
+      "O modelo de entrega decide a semântica: consumidores concorrentes dão distribuição de trabalho, fan-out dá cópias independentes. 'Venenosa' é uma propriedade da mensagem, nunca de um worker instável — uma falha aleatória que funciona na retentativa era transitória, e re tentar é o correto. Um consumidor lento acumula backlog; isso é backpressure, não dead letters.",
     challenge:
-      "An event fails 3 times in a row and lands in the DLQ. What experiment would you run to decide whether it was poison or an unlucky transient streak?",
+      "Um evento falha 3 vezes seguidas e vai parar na DLQ. Que experimento você faria para decidir se era venenoso ou uma sequência infeliz de falhas transitórias?",
   },
   tail: {
     id: "tail",
     title: "P99 & Tail Latency",
     scenario: {
-      system: "Service returning 100 request timings per run.",
-      data: "Teaching model with a guaranteed single tail observation per 100 requests.",
-      symptom: "The average looks fine; the slowest 1% of users wait 10× longer.",
-      baseline: "Distribution, not a single number, describes latency.",
+      system: "Serviço que devolve 100 tempos de requisição por execução.",
+      data: "Modelo didático com exatamente uma observação de cauda garantida a cada 100 requisições.",
+      symptom: "A média parece boa; os 1% mais lentos esperam 10× mais.",
+      baseline: "A distribuição, não um número único, descreve a latência.",
     },
     instrument: {
       kind: "latency-histogram",
       caption:
-        "Read the distribution: where most requests land, and where the percentile markers fall.",
+        "Leia a distribuição: onde a maioria das requisições cai, e onde os marcadores de percentil ficam.",
       data: {
         unit: "ms",
         bins: binsFor(tailSample),
@@ -278,18 +278,18 @@ export const LABS: Record<SandboxId, LabBench> = {
           { label: "P50", value: percentile(tailSample, 50), convention: "nearest-rank" },
           { label: "P99", value: percentile(tailSample, 99), convention: "nearest-rank" },
         ],
-        note: "Teaching model, not a benchmark: exactly 1 tail observation per 100 is guaranteed. With 100 samples, P99.9 is fragile for inferring the population.",
+        note: "Modelo didático, não benchmark: exatamente 1 observação de cauda a cada 100 é garantida. Com 100 amostras, o P99.9 é frágil para inferir a população.",
       },
       textEquivalent:
-        "Histogram of 100 request timings in ms: most under ~1.1 s, a few 1.8–3.3 s, exactly one 7–10.5 s tail. Markers: P50 and P99 by nearest rank. The model guarantees exactly one tail observation per 100 samples.",
+        "Histograma de 100 tempos de requisição em ms: a maioria abaixo de ~1,1 s, algumas entre 1,8–3,3 s, exatamente uma cauda de 7–10,5 s. Marcadores: P50 e P99 por nearest rank. O modelo garante exatamente uma observação de cauda a cada 100 amostras.",
     },
     evidence: [
-      "Read P99 off the histogram and say which observation determines it (nearest rank).",
-      "Explain the example 99×100 ms + 1×10,000 ms → P99 = 100 ms while max = 10,000 ms.",
+      "Leia o P99 no histograma e diga qual observação o determina (nearest rank).",
+      "Explique o exemplo 99×100 ms + 1×10.000 ms → P99 = 100 ms enquanto o máximo = 10.000 ms.",
     ],
     interpretation:
-      "Percentiles are computed over the distribution: P99 is the 99th value of the sorted sample (nearest rank). The classic example shows why averages mislead — mean 199 ms, but the unlucky request waited 10,000 ms. And with only 100 samples, P99 itself is one observation: fragile for claiming population properties.",
+      "Os percentis são calculados sobre a distribuição: o P99 é o 99º valor da amostra ordenada (nearest rank). O exemplo clássico mostra por que as médias enganam — média de 199 ms, mas a requisição azarada esperou 10.000 ms. E com apenas 100 amostras, o próprio P99 é uma observação: frágil para afirmar propriedades da população.",
     challenge:
-      "Your fix improves the mean by 30% but P99 is unchanged. Which metric answers the user's complaint 'the page sometimes hangs for 10 seconds'?",
+      "Sua correção melhora a média em 30% mas o P99 não muda. Qual métrica responde à reclamação do usuário 'a página às vezes trava por 10 segundos'?",
   },
 };

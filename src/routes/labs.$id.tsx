@@ -40,8 +40,8 @@ export const Route = createFileRoute("/labs/$id")({
   }),
   head: ({ params }) => {
     const meta = isSandboxId(params.id) ? SANDBOXES.find((s) => s.id === params.id) : undefined;
-    const title = meta ? `${meta.title} Lab — VibeCoder Academy` : "Lab — VibeCoder Academy";
-    const description = meta?.blurb ?? "Interactive production lab.";
+    const title = meta ? `${meta.title} — Laboratórios — VibeCoder Academy` : "Laboratório — VibeCoder Academy";
+    const description = meta?.blurb ?? "Laboratório interativo de produção.";
     return {
       meta: [
         { title },
@@ -81,12 +81,12 @@ function LabPage() {
         className="mb-6 inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-primary"
       >
         <ArrowLeft className="size-3.5" />
-        All labs
+        Todos os laboratórios
       </Link>
 
       <header className="mb-8">
         <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Interactive Lab #{meta.num}
+          Laboratório interativo #{meta.num}
         </span>
         <h1 className="font-serif text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           {bench.title}
@@ -100,11 +100,11 @@ function LabPage() {
           className="mb-8 rounded-2xl border border-primary/40 bg-primary/10 p-4"
         >
           <p className="font-mono text-xs uppercase tracking-wide text-primary">
-            Mission context · {getMission(missionSlug)!.title}
+            Contexto de missão · {getMission(missionSlug)!.title}
           </p>
           {hypothesis ? (
             <p className="mt-2 text-sm leading-relaxed text-foreground">
-              <span className="font-semibold">Hypothesis in test: </span>
+              <span className="font-semibold">Hipótese em teste: </span>
               {hypothesis}
             </p>
           ) : null}
@@ -113,28 +113,28 @@ function LabPage() {
             params={{ slug: missionSlug }}
             className="mt-3 inline-flex items-center gap-2 rounded-xl border border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
           >
-            ← Return to the mission with your results
+            ← Voltar à missão com os seus resultados
           </Link>
         </div>
       ) : null}
 
       <section className="mb-8 rounded-2xl border border-border/70 bg-card/40 p-5">
-        <SectionTitle icon={ScrollText}>Scenario</SectionTitle>
+        <SectionTitle icon={ScrollText}>Cenário</SectionTitle>
         <dl className="space-y-2 text-sm">
           <div>
-            <dt className="font-semibold text-foreground">System</dt>
+            <dt className="font-semibold text-foreground">Sistema</dt>
             <dd className="text-muted-foreground">{bench.scenario.system}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Data / mechanism</dt>
+            <dt className="font-semibold text-foreground">Dado / mecanismo</dt>
             <dd className="text-muted-foreground">{bench.scenario.data}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Symptom</dt>
+            <dt className="font-semibold text-foreground">Sintoma</dt>
             <dd className="text-muted-foreground">{bench.scenario.symptom}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-foreground">Baseline</dt>
+            <dt className="font-semibold text-foreground">Linha de base</dt>
             <dd className="text-muted-foreground">{bench.scenario.baseline}</dd>
           </div>
         </dl>
@@ -142,12 +142,12 @@ function LabPage() {
 
       {/* Bancada unificada: previsão → execução identificável → observação → relatório */}
       <section className="mb-8">
-        <SectionTitle icon={FlaskConical}>Workbench — predict, run, report</SectionTitle>
+        <SectionTitle icon={FlaskConical}>Bancada — prever, executar, relatar</SectionTitle>
         <Sandbox key={id} />
       </section>
 
       <section className="mb-8 rounded-2xl border border-border/70 bg-card/40 p-5">
-        <SectionTitle icon={Target}>Representation — what to observe</SectionTitle>
+        <SectionTitle icon={Target}>Representação — o que observar</SectionTitle>
         <p className="mb-4 text-sm text-muted-foreground">{inst.caption}</p>
         {inst.kind === "request-flow" ? <RequestFlowInstrument data={inst.data as never} /> : null}
         {inst.kind === "state-machine" ? <StateMachineInstrument data={inst.data as never} /> : null}
@@ -157,7 +157,7 @@ function LabPage() {
       </section>
 
       <section className="mb-8 rounded-2xl border border-border/70 bg-card/40 p-5">
-        <SectionTitle icon={ListChecks}>Evidence — check yourself</SectionTitle>
+        <SectionTitle icon={ListChecks}>Evidência — verifique-se</SectionTitle>
         <ul className="space-y-2 text-sm text-muted-foreground">
           {bench.evidence.map((e, i) => (
             <li key={i} className="flex gap-2">
@@ -169,18 +169,18 @@ function LabPage() {
       </section>
 
       <section className="mb-8 rounded-2xl border border-border/70 bg-card/40 p-5">
-        <SectionTitle icon={Lightbulb}>Interpretation</SectionTitle>
+        <SectionTitle icon={Lightbulb}>Interpretação</SectionTitle>
         <p className="text-sm leading-relaxed text-foreground/90">{bench.interpretation}</p>
       </section>
 
       <section className="mb-8 rounded-2xl border border-primary/30 bg-primary/5 p-5">
-        <SectionTitle icon={Target}>Challenge</SectionTitle>
+        <SectionTitle icon={Target}>Desafio</SectionTitle>
         <p className="text-sm font-medium text-foreground">{bench.challenge}</p>
       </section>
 
       <div className="flex flex-wrap items-center gap-2 border-t border-border/50 pt-4">
         <span className="text-xs uppercase tracking-wider text-muted-foreground">
-          Learn the theory:
+          Estude a teoria:
         </span>
         {meta.conceptIds.map((cid) => {
           const c = getConcept(cid);

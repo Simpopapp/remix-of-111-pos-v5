@@ -42,7 +42,7 @@ export function LessonView({
       <SynthesisBlock lesson={lesson} />
 
       <p className="mb-8 text-xs leading-relaxed text-muted-foreground">
-        Editorial status: {lesson.provenance.reviewed ? "reviewed" : "not independently reviewed yet"}.{" "}
+        Status editorial: {lesson.provenance.reviewed ? "revisado" : "ainda sem revisão independente"}.{" "}
         {lesson.provenance.notes}
       </p>
     </div>

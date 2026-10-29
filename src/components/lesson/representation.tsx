@@ -106,9 +106,9 @@ export function LessonRepresentation({ lesson }: { lesson: Lesson }) {
           ))}
         </ul>
         {history.length ? (
-          <p className="mb-3 text-xs text-muted-foreground">History: {history.join(" → ")}</p>
+          <p className="mb-3 text-xs text-muted-foreground">Histórico: {history.join(" → ")}</p>
         ) : null}
-        <KvBox title="Policy budget · " entries={Object.entries(budget)} />
+        <KvBox title="Orçamento de política · " entries={Object.entries(budget)} />
       </div>
     );
   }

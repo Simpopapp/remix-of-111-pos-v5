@@ -6,13 +6,13 @@ import { BenchShell, type BenchRunContext } from "./bench-shell";
 const SPECS: BenchParamSpec[] = [
   {
     key: "sampleSize",
-    label: "Sample size",
+    label: "Tamanho da amostra",
     min: 100,
     max: 1000,
     step: 100,
     default: 100,
     unit: "requests",
-    hint: "deterministic sample: same seed → same distribution",
+    hint: "amostra determinística: mesma seed → mesma distribuição",
   },
 ];
 
@@ -61,8 +61,8 @@ export function TailLatencySandbox() {
     return {
       headline: `n=${n} · p50 ${p50} ms · p99 ${p99} ms`,
       detail: [
-        `p99.9 ${p999} ms · slowest request ${max} ms`,
-        `sample: ${n} simulated requests · units: ms · teaching model, not a benchmark`,
+        `p99.9 ${p999} ms · requisição mais lenta ${max} ms`,
+        `amostra: ${n} requisições simuladas · unidades: ms · modelo didático, não benchmark`,
       ],
     };
   };
@@ -78,7 +78,7 @@ export function TailLatencySandbox() {
     <BenchShell
       id="tail"
       specs={SPECS}
-      actions={[{ key: "run", label: "Send simulated requests", variant: "primary" }]}
+      actions={[{ key: "run", label: "Enviar requisições simuladas", variant: "primary" }]}
       onRun={onRun}
       onReset={onReset}
       instrument={
@@ -104,8 +104,8 @@ export function TailLatencySandbox() {
                 <div
                   key={i}
                   className="flex flex-1 flex-col items-center gap-1"
-                  title={`${b.from}–${b.to} ms: ${b.count} requests`}
-                  aria-label={`${b.from} to ${b.to} milliseconds: ${b.count} requests`}
+                  title={`${b.from}–${b.to} ms: ${b.count} requisições`}
+                  aria-label={`${b.from} a ${b.to} milissegundos: ${b.count} requisições`}
                 >
                   <span className="font-mono text-xs text-muted-foreground" aria-hidden="true">
                     {b.count > 0 ? b.count : ""}
@@ -127,13 +127,13 @@ export function TailLatencySandbox() {
               ))}
             </div>
             <p className="text-center text-xs text-muted-foreground">
-              Histogram units: ms · sample: n={result.n} simulated requests (seed {result.seed}) · the{" "}
-              <span className="text-warning">p99 marker</span> sits in the highlighted bucket — 99% of requests are faster than it.
+              Unidades do histograma: ms · amostra: n={result.n} requisições simuladas (seed {result.seed}) · o{" "}
+              <span className="text-warning">marcador de p99</span> fica no bucket destacado — 99% das requisições são mais rápidas que ele.
             </p>
           </div>
         ) : (
           <p className="text-center text-xs text-muted-foreground">
-            [Ready] Predict the shape of the distribution, then fire a simulated batch. Units are ms; the sample size is yours to choose.
+            [Pronto] Preveja a forma da distribuição, e depois dispare um lote simulado. As unidades são ms; o tamanho da amostra você escolhe.
           </p>
         )
       }

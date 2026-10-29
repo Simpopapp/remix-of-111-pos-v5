@@ -13,22 +13,22 @@ interface Props {
 const STATUS = {
   info: {
     symbol: "●",
-    label: "Info",
+    label: "Informativo",
     className: "text-info",
   },
   success: {
     symbol: "✓",
-    label: "Success",
+    label: "Sucesso",
     className: "text-success",
   },
   warn: {
     symbol: "▲",
-    label: "Warning",
+    label: "Atenção",
     className: "text-warning",
   },
   fail: {
     symbol: "✕",
-    label: "Failure",
+    label: "Falha",
     className: "text-destructive",
   },
 } as const;
@@ -63,15 +63,15 @@ export function EventTrackInstrument({
       className="min-w-0 space-y-4 text-foreground"
     >
       <figcaption id={titleId} className="text-sm font-semibold break-words">
-        Event track — {spec.caption}
+        Trilha de eventos — {spec.caption}
       </figcaption>
 
       <p className="text-xs text-muted-foreground">
-        Time ({data.unit}): {from} → {to}. Read each lane in ascending
-        timestamp order. Equal timestamps do not establish causal order.
+        Tempo ({data.unit}): {from} → {to}. Leia cada trilha em ordem crescente
+        de timestamp. Timestamps iguais não estabelecem ordem causal.
       </p>
 
-      <ul aria-label="Event status legend" className="flex flex-wrap gap-3 text-xs">
+      <ul aria-label="Legenda de status dos eventos" className="flex flex-wrap gap-3 text-xs">
         {Object.entries(STATUS).map(([kind, status]) => (
           <li key={kind} className={status.className}>
             <span aria-hidden="true">{status.symbol}</span> {status.label}
@@ -82,7 +82,7 @@ export function EventTrackInstrument({
       {data.window ? (
         <div className="space-y-2">
           <p className="text-xs text-muted-foreground">
-            Observation window: {data.window.from}–{data.window.to} {data.unit}
+            Janela de observação: {data.window.from}–{data.window.to} {data.unit}
             {" "}(inclusive). Events outside it remain visible and are labelled.
           </p>
           <div

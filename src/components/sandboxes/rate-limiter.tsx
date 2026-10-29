@@ -7,36 +7,36 @@ import { BenchShell, type BenchRunContext } from "./bench-shell";
 const SPECS: BenchParamSpec[] = [
   {
     key: "capacity",
-    label: "Bucket capacity",
+    label: "Capacidade do balde",
     min: 1,
     max: 10,
     step: 1,
     default: 5,
     unit: "tokens",
-    hint: "burst size the bucket absorbs before rejecting",
+    hint: "rajada que o balde absorve antes de rejeitar",
   },
   {
     key: "refillMs",
-    label: "Refill interval",
+    label: "Intervalo de reabastecimento",
     min: 250,
     max: 3000,
     step: 250,
     default: 1500,
     unit: "ms",
-    hint: "sustained rate = 1 token per interval",
+    hint: "fluxo sustentado = 1 token por intervalo",
   },
 ];
 
 const TOGGLES: BenchToggleSpec[] = [
   {
     key: "scope",
-    label: "Limit scope",
+    label: "Escopo do limite",
     options: [
-      { value: "per-ip", label: "Per client (per-IP)" },
-      { value: "global", label: "Shared global bucket" },
+      { value: "per-ip", label: "Por cliente (por-IP)" },
+      { value: "global", label: "Balde global compartilhado" },
     ],
     default: "per-ip",
-    hint: "per-IP throttles one noisy client; global throttles everyone together",
+    hint: "por-IP limita um cliente barulhento; global limita todos juntos",
   },
 ];
 
@@ -68,7 +68,7 @@ export function RateLimiterSandbox() {
   const cfg = useRef({ capacity: 5, refillMs: 1500, scope: "per-ip" });
   const buckets = useRef<{ A: TokenBucket; B: TokenBucket } | null>(null);
   const [log, setLog] = useState<LogLine[]>([
-    { ok: null, text: "[Ready] Predict, then send requests from Client A or Client B." },
+    { ok: null, text: "[Pronto] Faça a previsão e envie requisições do Cliente A ou do Cliente B." },
   ]);
   const [tokensView, setTokensView] = useState({ a: 5, b: 5, capacity: 5, scope: "per-ip" });
 
@@ -91,7 +91,7 @@ export function RateLimiterSandbox() {
   };
 
   const bucketName = (client: "A" | "B") =>
-    cfg.current.scope === "global" ? "the shared bucket" : `Client ${client}'s bucket`;
+    cfg.current.scope === "global" ? "o balde compartilhado" : `Balde do Cliente ${client}`;
 
   const sendOne = (client: "A" | "B") => {
     const b = bucketFor(client);
@@ -103,8 +103,8 @@ export function RateLimiterSandbox() {
         {
           ok: res.ok,
           text: res.ok
-            ? `[${time}] Client ${client} → 200 OK forwarded to the service (tokens left: ${res.remaining})`
-            : `[${time}] Client ${client} → 429 TOO MANY REQUESTS — rejected at the edge (no tokens left)`,
+            ? `[${time}] Cliente ${client} → 200 OK encaminhado ao serviço (tokens restantes: ${res.remaining})`
+            : `[${time}] Cliente ${client} → 429 TOO MANY REQUESTS — rejeitado na borda (sem tokens)`,
         },
         ...prev,
       ].slice(0, 24),
@@ -128,11 +128,11 @@ export function RateLimiterSandbox() {
       refreshView();
       return {
         headline: res.ok
-          ? `Client ${client} accepted — 1 token consumed, forwarded to the service`
-          : `Client ${client} rejected with 429 at the edge`,
+          ? `Cliente ${client} aceito — 1 token consumido, encaminhado ao serviço`
+          : `Cliente ${client} rejeitado com 429 na borda`,
         detail: [
-          `Tokens left in ${bucketName(client)}: ${res.remaining}/${cfg.current.capacity}`,
-          res.ok ? "Destination: API service" : "Destination: rejected at the edge (no service call)",
+          `Tokens restantes em ${bucketName(client)}: ${res.remaining}/${cfg.current.capacity}`,
+          res.ok ? "Destino: serviço da API" : "Destino: rejeitado na borda (sem chamada ao serviço)",
         ],
       };
     }
@@ -142,12 +142,12 @@ export function RateLimiterSandbox() {
     const rejected = 5 - accepted;
     refreshView();
     return {
-      headline: `Burst ×5 from Client A: ${accepted} accepted, ${rejected} rejected with 429`,
+      headline: `Rajada ×5 do Cliente A: ${accepted} aceitas, ${rejected} rejeitadas com 429`,
       detail: [
-        accepted > 0 ? `${accepted} consumed tokens and reached the service` : "The bucket had no tokens left",
+        accepted > 0 ? `${accepted} tokens consumidos e chegaram ao serviço` : "O balde não tinha tokens restantes",
         rejected > 0
-          ? `${rejected} rejected — a burst wider than the bucket (or faster than the refill) overflows`
-          : "The whole burst fit inside the bucket capacity",
+          ? `${rejected} rejeitadas — rajada maior que o balde (ou mais rápida que o reabastecimento) transborda`
+          : "A rajada inteira coube na capacidade do balde",
       ],
     };
   };
@@ -166,7 +166,7 @@ export function RateLimiterSandbox() {
       [
         {
           ok: null,
-          text: `[CFG] Buckets re-created with ${cfg.current.capacity} tokens, refill 1/${cfg.current.refillMs}ms, scope ${cfg.current.scope} — tokens restored to full.`,
+          text: `[CFG] Baldes recriados com ${cfg.current.capacity} tokens, reabastecimento 1/${cfg.current.refillMs}ms, escopo ${cfg.current.scope} — tokens restaurados ao máximo.`,
         },
         ...prev,
       ].slice(0, 24),
@@ -178,7 +178,7 @@ export function RateLimiterSandbox() {
     buckets.current = null;
     ensure();
     refreshView();
-    setLog([{ ok: null, text: "[Reset] Session restarted: buckets full, log cleared." }]);
+    setLog([{ ok: null, text: "[Reinício] Sessão reiniciada: baldes cheios, log limpo." }]);
   };
 
   return (
@@ -187,9 +187,9 @@ export function RateLimiterSandbox() {
       specs={SPECS}
       toggleSpecs={TOGGLES}
       actions={[
-        { key: "request-a", label: "Send request (Client A)", variant: "primary" },
-        { key: "request-b", label: "Send request (Client B)", variant: "secondary" },
-        { key: "burst-a", label: "Burst ×5 (Client A)", variant: "warning" },
+        { key: "request-a", label: "Enviar requisição (Cliente A)", variant: "primary" },
+        { key: "request-b", label: "Enviar requisição (Cliente B)", variant: "secondary" },
+        { key: "burst-a", label: "Rajada ×5 (Cliente A)", variant: "warning" },
       ]}
       onRun={onRun}
       onReset={onReset}
@@ -200,7 +200,7 @@ export function RateLimiterSandbox() {
             {tokensView.scope === "global" ? (
               <div>
                 <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                  Shared bucket (global scope)
+                  Balde compartilhado (escopo global)
                 </p>
                 <div className="flex gap-1">{gauge(tokensView.a, tokensView.capacity)}</div>
               </div>
@@ -208,7 +208,7 @@ export function RateLimiterSandbox() {
               (["A", "B"] as const).map((c) => (
                 <div key={c}>
                   <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                    Client {c} (per-IP bucket)
+                    Cliente {c} (balde por-IP)
                   </p>
                   <div className="flex gap-1">
                     {gauge(c === "A" ? tokensView.a : tokensView.b, tokensView.capacity)}
@@ -218,12 +218,12 @@ export function RateLimiterSandbox() {
             )}
           </div>
           <p className="mb-3 text-center font-mono text-xs text-muted-foreground">
-            capacity {tokensView.capacity} tokens · refill 1 / {cfg.current.refillMs}ms · scope{" "}
-            {tokensView.scope === "global" ? "global" : "per-IP"} (refills on request)
+            capacidade {tokensView.capacity} tokens · reabastecimento 1 / {cfg.current.refillMs}ms · escopo{" "}
+            {tokensView.scope === "global" ? "global" : "por-IP"} (reabastece a cada requisição)
           </p>
           <div
             role="log"
-            aria-label="Request log"
+            aria-label="Registro de requisições"
             className="scrollbar-thin h-28 overflow-y-auto rounded-lg border border-border bg-background/60 p-3 font-mono text-xs text-muted-foreground"
           >
             {log.map((line, i) => (
