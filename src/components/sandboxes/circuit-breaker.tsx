@@ -6,12 +6,12 @@ import { BenchShell, type BenchRunContext } from "./bench-shell";
 const SPECS: BenchParamSpec[] = [
   {
     key: "threshold",
-    label: "Failure threshold",
+    label: "Limite de falhas",
     min: 1,
     max: 5,
     step: 1,
     default: 3,
-    hint: "consecutive failures that open the breaker",
+    hint: "falhas consecutivas que abrem o disjuntor",
   },
   {
     key: "cooldownMs",
@@ -21,20 +21,20 @@ const SPECS: BenchParamSpec[] = [
     step: 500,
     default: 5000,
     unit: "ms",
-    hint: "time in OPEN before a half-open probe is allowed",
+    hint: "tempo em OPEN antes de permitir uma sonda half-open",
   },
 ];
 
 const TOGGLES: BenchToggleSpec[] = [
   {
     key: "protection",
-    label: "Protection",
+    label: "Proteção",
     options: [
-      { value: "protected", label: "Breaker ON" },
-      { value: "unprotected", label: "Breaker OFF (raw calls)" },
+      { value: "protected", label: "Disjuntor LIGADO" },
+      { value: "unprotected", label: "Disjuntor DESLIGADO (chamadas diretas)" },
     ],
     default: "protected",
-    hint: "same call sequence, with and without protection",
+    hint: "a mesma sequência de chamadas, com e sem proteção",
   },
 ];
 
@@ -51,9 +51,9 @@ const TONE_CLASS: Record<CallLine["tone"], string> = {
 };
 
 const STATES: { id: BreakerState; label: string; tone: string }[] = [
-  { id: "closed", label: "CLOSED — normal calls", tone: "border-success/40 bg-success/10 text-success" },
-  { id: "open", label: "OPEN — failing fast", tone: "border-destructive/40 bg-destructive/10 text-destructive" },
-  { id: "half-open", label: "HALF-OPEN — probing", tone: "border-warning/40 bg-warning/10 text-warning" },
+  { id: "closed", label: "CLOSED — chamadas normais", tone: "border-success/40 bg-success/10 text-success" },
+  { id: "open", label: "OPEN — falhando rápido", tone: "border-destructive/40 bg-destructive/10 text-destructive" },
+  { id: "half-open", label: "HALF-OPEN — sondando", tone: "border-warning/40 bg-warning/10 text-warning" },
 ];
 
 /** S2 — Circuit Breaker na bancada unificada (F4: estados acompanham a execução). */
@@ -63,7 +63,7 @@ export function CircuitBreakerSandbox() {
   const clock = useRef(0);
   const cfg = useRef({ threshold: 3, cooldownMs: 5000, protection: "protected" });
   const [log, setLog] = useState<CallLine[]>([
-    { tone: "info", text: "[Ready] Predict: what happens to the 4th call during an outage?" },
+    { tone: "info", text: "[Pronto] Preveja: o que acontece com a 4ª chamada durante uma queda?" },
   ]);
   const [stateView, setStateView] = useState<BreakerState>("closed");
   const [outageView, setOutageView] = useState(false);
@@ -89,19 +89,19 @@ export function CircuitBreakerSandbox() {
     if (ctx.action === "outage") {
       outage.current = true;
       setOutageView(true);
-      push("err", "[OUTAGE] Downstream payment provider is DOWN — next calls will fail.");
+      push("err", "[QUEDA] O provedor de pagamento está FORA — as próximas chamadas vão falhar.");
       return {
-        headline: "Downstream outage injected",
-        detail: ["No call was issued; the injection only changes what the next calls meet."],
+        headline: "Queda do serviço injetada",
+        detail: ["Nenhuma chamada foi feita; a injeção só muda o que as próximas chamadas encontram."],
       };
     }
     if (ctx.action === "restore") {
       outage.current = false;
       setOutageView(false);
-      push("info", "[RESTORE] Payment provider is back up — next calls should succeed.");
+      push("info", "[RESTAURADO] Provedor de pagamento de volta — as próximas chamadas devem funcionar.");
       return {
-        headline: "Downstream restored",
-        detail: ["The breaker only learns this when the next probe/call succeeds."],
+        headline: "Serviço restaurado",
+        detail: ["O disjuntor só descobre isso quando a próxima sonda/chamada funciona."],
       };
     }
 
@@ -112,16 +112,16 @@ export function CircuitBreakerSandbox() {
       if (cfg.current.protection === "protected") {
         const res = b.record(true);
         setStateView(res.state);
-        push("ok", `[${String(callN).padStart(2, "0")}s] Call → 200 OK in 120 ms (breaker: ${res.state.toUpperCase()})`);
+        push("ok", `[${String(callN).padStart(2, "0")}s] Chamada → 200 OK em 120 ms (disjuntor: ${res.state.toUpperCase()})`);
         return {
-          headline: `Call succeeded in 120 ms (breaker ${res.state.toUpperCase()})`,
-          detail: ["Success resets the failure count."],
+          headline: `Chamada OK em 120 ms (disjuntor ${res.state.toUpperCase()})`,
+          detail: ["O sucesso zera a contagem de falhas."],
         };
       }
-      push("ok", `[${String(callN).padStart(2, "0")}s] Call → 200 OK in 120 ms (no breaker configured)`);
+      push("ok", `[${String(callN).padStart(2, "0")}s] Chamada → 200 OK em 120 ms (sem disjuntor configurado)`);
       return {
-        headline: "Call succeeded in 120 ms — no protection configured",
-        detail: ["Without protection this is identical when things are healthy; the difference appears in the outage."],
+        headline: "Chamada OK em 120 ms — sem proteção configurada",
+        detail: ["Sem proteção, é igual quando tudo está saudável; a diferença aparece na queda."],
       };
     }
 
@@ -129,30 +129,30 @@ export function CircuitBreakerSandbox() {
       const res = b.record(false);
       setStateView(res.state);
       if (res.blocked) {
-        push("warn", `[${String(callN).padStart(2, "0")}s] Call BLOCKED in ~5 ms — breaker OPEN, failing fast.`);
+        push("warn", `[${String(callN).padStart(2, "0")}s] Chamada BLOQUEADA em ~5 ms — disjuntor OPEN, falhando rápido.`);
         return {
-          headline: `Call #${callN} blocked in ~5 ms — breaker OPEN, failing fast`,
+          headline: `Chamada #${callN} bloqueada em ~5 ms — disjuntor OPEN, falhando rápido`,
           detail: [
-            "The caller got an immediate error instead of waiting 5000 ms.",
-            "Each blocked call advances the virtual clock, so the cooldown elapses.",
+            "O chamador recebeu um erro imediato em vez de esperar 5000 ms.",
+            "Cada chamada bloqueada avança o relógio virtual, então o cooldown passa.",
           ],
         };
       }
-      push("err", `[${String(callN).padStart(2, "0")}s] Call → TIMEOUT after 5000 ms (failure counted)`);
+      push("err", `[${String(callN).padStart(2, "0")}s] Chamada → TIMEOUT após 5000 ms (falha contada)`);
       return {
-        headline: `Call #${callN} timed out after 5000 ms — failure counted`,
+        headline: `Chamada #${callN} deu timeout após 5000 ms — falha contada`,
         detail: [
           res.state === "half-open"
-            ? "This was a half-open probe: it failed, so the breaker re-opens."
-            : "Consecutive failures approach the threshold that opens the breaker.",
+            ? "Esta era uma sonda half-open: falhou, então o disjuntor reabre."
+            : "As falhas consecutivas se aproximam do limite que abre o disjuntor.",
         ],
       };
     }
 
-    push("err", `[${String(callN).padStart(2, "0")}s] Call → TIMEOUT after 5000 ms (no protection: every call pays the full timeout)`);
+    push("err", `[${String(callN).padStart(2, "0")}s] Chamada → TIMEOUT após 5000 ms (sem proteção: toda chamada paga o timeout completo)`);
     return {
-      headline: `Call #${callN} timed out after 5000 ms — no protection`,
-      detail: ["Every caller pays the full timeout while the provider is down; nothing trips, nothing fails fast."],
+      headline: `Chamada #${callN} deu timeout após 5000 ms — sem proteção`,
+      detail: ["Todo chamador paga o timeout completo com o provedor fora; nada dispara, nada falha rápido."],
     };
   };
 
@@ -167,7 +167,7 @@ export function CircuitBreakerSandbox() {
     setStateView("closed");
     push(
       "info",
-      `[CFG] Breaker re-created with threshold ${cfg.current.threshold}, cooldown ${cfg.current.cooldownMs}ms, protection ${cfg.current.protection} — breaker state restarted.`,
+      `[CFG] Disjuntor recriado com limite ${cfg.current.threshold}, cooldown ${cfg.current.cooldownMs}ms, proteção ${cfg.current.protection} — estado do disjuntor reiniciado.`,
     );
   };
 
@@ -178,7 +178,7 @@ export function CircuitBreakerSandbox() {
     ensure();
     setStateView("closed");
     setOutageView(false);
-    setLog([{ tone: "info", text: "[Reset] Session restarted: breaker CLOSED, no outage, clock at 0." }]);
+    setLog([{ tone: "info", text: "[Reinício] Sessão reiniciada: disjuntor CLOSED, sem queda, relógio em 0." }]);
   };
 
   return (
@@ -187,9 +187,9 @@ export function CircuitBreakerSandbox() {
       specs={SPECS}
       toggleSpecs={TOGGLES}
       actions={[
-        { key: "call", label: "Call payment API", variant: "primary" },
-        { key: "outage", label: "Inject outage", variant: "warning" },
-        { key: "restore", label: "Restore downstream", variant: "secondary" },
+        { key: "call", label: "Chamar API de pagamento", variant: "primary" },
+        { key: "outage", label: "Injetar queda", variant: "warning" },
+        { key: "restore", label: "Restaurar serviço", variant: "secondary" },
       ]}
       onRun={onRun}
       onReset={onReset}
@@ -211,18 +211,18 @@ export function CircuitBreakerSandbox() {
               ))
             ) : (
               <div className="rounded-lg border border-border bg-muted px-2 py-1.5 text-center text-[10px] font-mono uppercase tracking-wider text-muted-foreground sm:col-span-3">
-                No breaker — calls always flow, healthy or not
+                Sem disjuntor — as chamadas sempre fluem, saudáveis ou não
               </div>
             )}
           </div>
           {outageView ? (
             <p className="mb-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-1.5 text-center text-xs font-bold text-destructive">
-              OUTAGE ACTIVE — payment provider is down
+              QUEDA ATIVA — provedor de pagamento está fora
             </p>
           ) : null}
           <div
             role="log"
-            aria-label="Call log"
+            aria-label="Registro de chamadas"
             className="scrollbar-thin h-28 overflow-y-auto rounded-lg border border-border bg-background/60 p-3 font-mono text-xs text-muted-foreground"
           >
             {log.map((line, i) => (
